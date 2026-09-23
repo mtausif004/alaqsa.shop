@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>আল-আকসা বার্মিজ শপ | অনলাইন অর্ডার</title>
+  <meta
+    name="description"
+    content="আল-আকসা বার্মিজ শপ - সহজে পণ্য নির্বাচন করুন এবং WhatsApp-এ অর্ডার করুন।"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            bangla: [
+              "Hind Siliguri",
+              "Noto Sans Bengali",
+              "Arial",
+              "sans-serif"
+            ]
+          },
+          colors: {
+            brand: {
+              50: "#f0fdf4",
+              100: "#dcfce7",
+              500: "#16a34a",
+              600: "#15803d",
+              700: "#166534",
+              800: "#14532d",
+              900: "#052e16"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Bangla-friendly font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Hind Siliguri", "Noto Sans Bengali", Arial, sans-serif;
+      background: #f8fafc;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .product-card {
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+    }
+
+    .product-image {
+      transition: transform 0.35s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.04);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .admin-panel {
+      animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .toast {
+      animation: toastIn 0.25s ease;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+    }
+
+    .quantity-btn {
+      transition: all 0.15s ease;
+    }
+
+    .quantity-btn:active {
+      transform: scale(0.9);
+    }
+  </style>
+</head>
+
+<body class="text-slate-800">
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+  <header class="sticky top-0 z-40 border-b border-slate-200 glass">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="h-16 flex items-center justify-between gap-3">
+
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 min-w-0">
+          <div
+            class="w-11 h-11 shrink-0 rounded-2xl bg-green-600 text-white flex items-center justify-center shadow-lg shadow-green-600/20"
+          >
+            <i class="fa-solid fa-store text-lg"></i>
+          </div>
+
+          <div class="min-w-0">
+            <h1 class="font-bold text-lg leading-tight truncate">
+              আল-আকসা বার্মিজ শপ
+            </h1>
+            <p class="text-xs text-slate-500">
+              অনলাইন অর্ডার
+            </p>
+          </div>
+        </a>
+
+        <!-- Header buttons -->
+        <div class="flex items-center gap-2">
+
+          <button
+            id="adminToggleBtn"
+            type="button"
+            class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition"
+          >
+            <i class="fa-solid fa-gear"></i>
+            Admin
+          </button>
+
+          <button
+            id="mobileAdminBtn"
+            type="button"
+            class="sm:hidden w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center"
+            aria-label="Admin"
+          >
+            <i class="fa-solid fa-gear"></i>
+          </button>
+
+          <a
+            href="#cart"
+            class="relative w-10 h-10 rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center transition"
+            aria-label="Cart"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <span
+              id="headerCartCount"
+              class="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center"
+            >
+              0
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+  <section class="bg-gradient-to-br from-green-950 via-green-800 to-green-600 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+      <div class="max-w-3xl">
+
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sm mb-5"
+        >
+          <i class="fa-solid fa-circle-check text-green-300"></i>
+          সহজ ও দ্রুত অর্ডার
+        </span>
+
+        <h2 class="text-3xl sm:text-5xl font-bold leading-tight">
+          আপনার পছন্দের পণ্য
+          <span class="text-green-200">অর্ডার করুন</span>
+        </h2>
+
+        <p class="mt-4 text-green-50/80 text-base sm:text-lg leading-relaxed">
+          পণ্য নির্বাচন করুন, কার্টে যোগ করুন এবং আপনার তথ্য দিয়ে
+          সরাসরি WhatsApp-এ অর্ডার পাঠিয়ে দিন।
+        </p>
+
+        <a
+          href="#products"
+          class="inline-flex items-center gap-2 mt-7 px-5 py-3 rounded-xl bg-white text-green-800 hover:bg-green-50 font-bold transition shadow-lg"
+        >
+          <i class="fa-solid fa-bag-shopping"></i>
+          পণ্য দেখুন
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       ADMIN PANEL
+  ========================================================== -->
+  <section id="adminSection" class="hidden admin-panel bg-slate-900 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <div>
+          <h2 class="text-xl font-bold">
+            <i class="fa-solid fa-shield-halved mr-2 text-green-400"></i>
+            Admin Panel
+          </h2>
+          <p class="text-sm text-slate-400">
+            পণ্য যোগ, সম্পাদনা অথবা মুছে ফেলুন
+          </p>
+        </div>
+
+        <button
+          id="closeAdminBtn"
+          type="button"
+          class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Add product -->
+      <div class="bg-white text-slate-800 rounded-2xl p-5 mb-6">
+        <h3 class="font-bold text-lg mb-4">
+          <i class="fa-solid fa-plus-circle text-green-600 mr-2"></i>
+          নতুন পণ্য যোগ করুন
+        </h3>
+
+        <form id="addProductForm" class="grid sm:grid-cols-3 gap-4">
+
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">
+              পণ্যের নাম
+            </label>
+            <input
+              id="newProductName"
+              type="text"
+              required
+              placeholder="যেমন: বার্মিজ আচার"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">
+              মূল্য (৳)
+            </label>
+            <input
+              id="newProductPrice"
+              type="number"
+              min="0"
+              step="1"
+              required
+              placeholder="500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">
+              Image URL
+            </label>
+            <input
+              id="newProductImage"
+              type="url"
+              required
+              placeholder="https://..."
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+            />
+          </div>
+
+          <div class="sm:col-span-3">
+            <button
+              type="submit"
+              class="px-5 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition"
+            >
+              <i class="fa-solid fa-plus mr-2"></i>
+              পণ্য যোগ করুন
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Existing products -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-lg">
+            বর্তমান পণ্যসমূহ
+          </h3>
+
+          <button
+            id="resetProductsBtn"
+            type="button"
+            class="text-sm px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300"
+          >
+            <i class="fa-solid fa-rotate-left mr-1"></i>
+            ডিফল্ট রিসেট
+          </button>
+        </div>
+
+        <div id="adminProductList" class="space-y-3"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       MAIN
+  ========================================================== -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <!-- Products -->
+    <section id="products">
+
+      <div class="flex items-end justify-between gap-4 mb-5">
+        <div>
+          <p class="text-green-600 font-bold text-sm">
+            আমাদের কালেকশন
+          </p>
+
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">
+            পণ্যসমূহ
+          </h2>
+        </div>
+
+        <div class="text-sm text-slate-500">
+          <span id="productCount">0</span> টি পণ্য
+        </div>
+      </div>
+
+      <div
+        id="productGrid"
+        class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+      ></div>
+
+    </section>
+
+
+    <!-- =======================================================
+         CART + CHECKOUT
+    ======================================================== -->
+    <section id="cart" class="mt-12">
+
+      <div class="grid lg:grid-cols-5 gap-6 items-start">
+
+        <!-- Cart -->
+        <div class="lg:col-span-3">
+
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h2 class="text-xl font-bold">
+                  <i class="fa-solid fa-cart-shopping text-green-600 mr-2"></i>
+                  আপনার কার্ট
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                  অর্ডার করার জন্য পণ্য নির্বাচন করুন
+                </p>
+              </div>
+
+              <span
+                id="cartItemBadge"
+                class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-sm font-bold"
+              >
+                0 item
+              </span>
+            </div>
+
+            <div id="cartItems" class="divide-y divide-slate-100"></div>
+
+            <!-- Empty cart -->
+            <div
+              id="emptyCart"
+              class="p-10 text-center text-slate-500"
+            >
+              <div class="w-16 h-16 mx-auto rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-cart-shopping text-2xl text-slate-400"></i>
+              </div>
+
+              <p class="font-semibold text-slate-700">
+                আপনার কার্ট এখনো খালি
+              </p>
+
+              <p class="text-sm mt-1">
+                উপরের পণ্যগুলো থেকে পছন্দের পণ্য যোগ করুন।
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Checkout -->
+        <div class="lg:col-span-2">
+
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 lg:sticky lg:top-24">
+
+            <h2 class="text-xl font-bold mb-1">
+              অর্ডার সম্পন্ন করুন
+            </h2>
+
+            <p class="text-sm text-slate-500 mb-5">
+              আপনার ডেলিভারি তথ্য দিন
+            </p>
+
+            <form id="checkoutForm" class="space-y-4">
+
+              <div>
+                <label
+                  for="customerName"
+                  class="block text-sm font-semibold mb-1.5"
+                >
+                  আপনার নাম
+                </label>
+
+                <div class="relative">
+                  <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                  <input
+                    id="customerName"
+                    type="text"
+                    required
+                    placeholder="আপনার পূর্ণ নাম"
+                    class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  />
+                </div>
+              </div>
+
+
+              <div>
+                <label
+                  for="customerPhone"
+                  class="block text-sm font-semibold mb-1.5"
+                >
+                  মোবাইল নম্বর
+                </label>
+
+                <div class="relative">
+                  <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                  <input
+                    id="customerPhone"
+                    type="tel"
+                    required
+                    placeholder="01XXXXXXXXX"
+                    class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  />
+                </div>
+              </div>
+
+
+              <div>
+                <label
+                  for="deliveryAddress"
+                  class="block text-sm font-semibold mb-1.5"
+                >
+                  ডেলিভারি ঠিকানা
+                </label>
+
+                <div class="relative">
+                  <i class="fa-solid fa-location-dot absolute left-4 top-4 text-slate-400"></i>
+
+                  <textarea
+                    id="deliveryAddress"
+                    required
+                    rows="3"
+                    placeholder="বাসা/রোড/এলাকা/থানা/জেলা"
+                    class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 resize-none"
+                  ></textarea>
+                </div>
+              </div>
+
+
+              <!-- Total -->
+              <div class="rounded-xl bg-green-50 border border-green-100 p-4">
+
+                <div class="flex items-center justify-between text-sm text-slate-600">
+                  <span>মোট পণ্য</span>
+                  <span id="checkoutItemCount">0 টি</span>
+                </div>
+
+                <div class="border-t border-green-100 my-3"></div>
+
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-800">
+                    সর্বমোট
+                  </span>
+
+                  <span
+                    id="grandTotal"
+                    class="text-2xl font-bold text-green-700"
+                  >
+                    ৳0
+                  </span>
+                </div>
+
+              </div>
+
+
+              <!-- WhatsApp -->
+              <button
+                type="submit"
+                class="w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-base shadow-lg shadow-green-600/20 transition flex items-center justify-center gap-2"
+              >
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                অর্ডার কনফার্ম করুন
+              </button>
+
+              <!-- Messenger -->
+              <button
+                id="messengerBtn"
+                type="button"
+                class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition flex items-center justify-center gap-2"
+              >
+                <i class="fa-brands fa-facebook-messenger text-lg"></i>
+                Messenger-এ শেয়ার করুন
+              </button>
+
+              <p class="text-xs text-center text-slate-400 leading-relaxed">
+                অর্ডার কনফার্ম করলে আপনার অর্ডারের বিবরণ WhatsApp-এ পাঠানোর
+                জন্য WhatsApp খুলবে।
+              </p>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+  <footer class="mt-12 bg-slate-950 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+
+        <div class="text-center sm:text-left">
+          <h3 class="font-bold text-lg">
+            আল-আকসা বার্মিজ শপ
+          </h3>
+
+          <p class="text-sm text-slate-400 mt-1">
+            আপনার পছন্দের পণ্য, সহজ অনলাইন অর্ডার।
+          </p>
+        </div>
+
+        <div class="text-sm text-slate-400">
+          © <span id="currentYear"></span> আল-আকসা বার্মিজ শপ
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- =========================================================
+       PIN MODAL
+  ========================================================== -->
+  <div
+    id="pinModal"
+    class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm px-4 flex items-center justify-center"
+  >
+
+    <div class="w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6">
+
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mb-3">
+          <i class="fa-solid fa-lock text-xl"></i>
+        </div>
+
+        <h3 class="text-xl font-bold">
+          Admin Panel
+        </h3>
+
+        <p class="text-sm text-slate-500 mt-1">
+          Admin PIN লিখুন
+        </p>
+      </div>
+
+      <form id="pinForm">
+
+        <input
+          id="adminPin"
+          type="password"
+          inputmode="numeric"
+          maxlength="4"
+          autocomplete="off"
+          placeholder="••••"
+          class="w-full text-center text-2xl tracking-[0.5em] px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+        />
+
+        <p
+          id="pinError"
+          class="hidden text-red-500 text-sm text-center mt-2"
+        >
+          ভুল PIN। আবার চেষ্টা করুন।
+        </p>
+
+        <div class="grid grid-cols-2 gap-3 mt-5">
+
+          <button
+            id="cancelPinBtn"
+            type="button"
+            class="py-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-semibold"
+          >
+            বাতিল
+          </button>
+
+          <button
+            type="submit"
+            class="py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold"
+          >
+            প্রবেশ করুন
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       TOAST
+  ========================================================== -->
+  <div
+    id="toast"
+    class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-4 py-3 rounded-xl bg-slate-900 text-white shadow-2xl text-sm font-semibold"
+  ></div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+  <script>
+    /*
+      ==========================================================
+      STORE CONFIGURATION
+      ==========================================================
+    */
+
+    const STORE_NAME = "আল-আকসা বার্মিজ শপ";
+
+    // WhatsApp number without + sign/spaces.
+    const WHATSAPP_NUMBER = "8801861007427";
+
+    // Simple admin PIN.
+    const ADMIN_PIN = "1234";
+
+    // LocalStorage keys.
+    const PRODUCT_STORAGE_KEY = "alqsa_burmese_products_v1";
+    const CART_STORAGE_KEY = "alqsa_burmese_cart_v1";
+
+
+    /*
+      ==========================================================
+      DEFAULT PRODUCTS
+      ==========================================================
+      These products are inserted automatically if no products
+      exist in localStorage.
+    */
+
+    const DEFAULT_PRODUCTS = [
+      {
+        id: "default-1",
+        name: "বার্মিজ আচার",
+        price: 350,
+        image:
+          "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: "default-2",
+        name: "স্পেশাল বার্মিজ নুডলস",
+        price: 280,
+        image:
+          "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: "default-3",
+        name: "বার্মিজ মিক্সড স্ন্যাকস",
+        price: 250,
+        image:
+          "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85"
+      },
+      {
+        id: "default-4",
+        name: "হোমমেড স্পেশাল আইটেম",
+        price: 450,
+        image:
+          "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85"
+      }
+    ];
+
+
+    /*
+      ==========================================================
+      DOM HELPERS
+      ==========================================================
+    */
+
+    const $ = (selector) => document.querySelector(selector);
+
+    const productGrid = $("#productGrid");
+    const productCount = $("#productCount");
+
+    const cartItems = $("#cartItems");
+    const emptyCart = $("#emptyCart");
+
+    const grandTotal = $("#grandTotal");
+    const checkoutItemCount = $("#checkoutItemCount");
+    const cartItemBadge = $("#cartItemBadge");
+    const headerCartCount = $("#headerCartCount");
+
+    const adminSection = $("#adminSection");
+    const adminProductList = $("#adminProductList");
+
+    const pinModal = $("#pinModal");
+    const pinForm = $("#pinForm");
+    const adminPin = $("#adminPin");
+    const pinError = $("#pinError");
+
+    const toast = $("#toast");
+
+
+    /*
+      ==========================================================
+      UTILITY FUNCTIONS
+      ==========================================================
+    */
+
+    function money(amount) {
+      return "৳" + Number(amount || 0).toLocaleString("bn-BD");
+    }
+
+    function generateId() {
+      return (
+        Date.now().toString(36) +
+        Math.random().toString(36).substring(2, 8)
+      );
+    }
+
+    /*
+      Escape HTML so product names/images entered from Admin
+      cannot inject arbitrary HTML into the storefront.
+    */
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      toast.classList.add("toast");
+
+      clearTimeout(window.toastTimer);
+
+      window.toastTimer = setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 2500);
+    }
+
+
+    /*
+      ==========================================================
+      PRODUCTS - LOCAL STORAGE
+      ==========================================================
+    */
+
+    function getProducts() {
+      try {
+        const saved = localStorage.getItem(PRODUCT_STORAGE_KEY);
+
+        if (!saved) {
+          localStorage.setItem(
+            PRODUCT_STORAGE_KEY,
+            JSON.stringify(DEFAULT_PRODUCTS)
+          );
+
+          return [...DEFAULT_PRODUCTS];
+        }
+
+        const parsed = JSON.parse(saved);
+
+        if (!Array.isArray(parsed)) {
+          throw new Error("Invalid product data");
+        }
+
+        return parsed;
+      } catch (error) {
+        console.error(error);
+
+        localStorage.setItem(
+          PRODUCT_STORAGE_KEY,
+          JSON.stringify(DEFAULT_PRODUCTS)
+        );
+
+        return [...DEFAULT_PRODUCTS];
+      }
+    }
+
+    function saveProducts(products) {
+      localStorage.setItem(
+        PRODUCT_STORAGE_KEY,
+        JSON.stringify(products)
+      );
+    }
+
+
+    /*
+      ==========================================================
+      CART - LOCAL STORAGE
+      ==========================================================
+    */
+
+    function getCart() {
+      try {
+        const saved = localStorage.getItem(CART_STORAGE_KEY);
+
+        if (!saved) {
+          return {};
+        }
+
+        const parsed = JSON.parse(saved);
+
+        return parsed && typeof parsed === "object"
+          ? parsed
+          : {};
+      } catch (error) {
+        console.error(error);
+        return {};
+      }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem(
+        CART_STORAGE_KEY,
+        JSON.stringify(cart)
+      );
+    }
+
+
+    /*
+      ==========================================================
+      RENDER PRODUCTS
+      ==========================================================
+    */
+
+    function renderProducts() {
+      const products = getProducts();
+      const cart = getCart();
+
+      productCount.textContent = products.length;
+
+      if (!products.length) {
+        productGrid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-slate-200">
+            <i class="fa-solid fa-box-open text-4xl text-slate-300"></i>
+            <p class="font-semibold mt-3">কোনো পণ্য পাওয়া যায়নি।</p>
+            <p class="text-sm text-slate-500 mt-1">
+              Admin Panel থেকে নতুন পণ্য যোগ করুন।
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+      productGrid.innerHTML = products
+        .map((product) => {
+          const quantity = Number(cart[product.id] || 0);
+
+          return `
+            <article class="product-card bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+
+              <div class="relative aspect-square bg-slate-100 overflow-hidden">
+
+                <img
+                  src="${escapeHTML(product.image)}"
+                  alt="${escapeHTML(product.name)}"
+                  class="product-image w-full h-full object-cover"
+                  loading="lazy"
+                  onerror="this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800"><rect width="100%" height="100%" fill="#e2e8f0"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#64748b" font-size="28">Image unavailable</text></svg>`
+                  )}'"
+                />
+
+                ${
+                  quantity > 0
+                    ? `
+                    <span class="absolute top-3 right-3 min-w-7 h-7 px-2 rounded-full bg-green-600 text-white text-xs font-bold flex items-center justify-center shadow">
+                      ${quantity}
+                    </span>
+                  `
+                    : ""
+                }
+
+              </div>
+
+              <div class="p-4">
+
+                <h3 class="font-bold text-base sm:text-lg text-slate-900 line-clamp-2 min-h-[3rem]">
+                  ${escapeHTML(product.name)}
+                </h3>
+
+                <div class="flex items-center justify-between gap-2 mt-3">
+
+                  <span class="text-green-700 font-bold text-lg">
+                    ${money(product.price)}
+                  </span>
+
+                  <div class="flex items-center gap-1.5">
+
+                    <button
+                      type="button"
+                      onclick="changeQuantity('${product.id}', -1)"
+                      class="quantity-btn w-9 h-9 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center"
+                      aria-label="Decrease quantity"
+                    >
+                      <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+
+                    <span
+                      class="w-7 text-center font-bold text-sm"
+                      id="qty-${product.id}"
+                    >
+                      ${quantity}
+                    </span>
+
+                    <button
+                      type="button"
+                      onclick="changeQuantity('${product.id}', 1)"
+                      class="quantity-btn w-9 h-9 rounded-lg bg-green-600 hover:bg-green-700 text-white flex items-center justify-center"
+                      aria-label="Increase quantity"
+                    >
+                      <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+
+    /*
+      ==========================================================
+      CHANGE CART QUANTITY
+      ==========================================================
+    */
+
+    function changeQuantity(productId, change) {
+      const products = getProducts();
+      const productExists = products.some(
+        (product) => product.id === productId
+      );
+
+      if (!productExists) {
+        return;
+      }
+
+      const cart = getCart();
+
+      const currentQuantity = Number(cart[productId] || 0);
+      const nextQuantity = currentQuantity + change;
+
+      if (nextQuantity <= 0) {
+        delete cart[productId];
+      } else {
+        cart[productId] = nextQuantity;
+      }
+
+      saveCart(cart);
+
+      renderProducts();
+      renderCart();
+    }
+
+
+    /*
+      ==========================================================
+      RENDER CART
+      ==========================================================
+    */
+
+    function renderCart() {
+      const products = getProducts();
+      const cart = getCart();
+
+      const items = products
+        .filter((product) => Number(cart[product.id] || 0) > 0)
+        .map((product) => ({
+          ...product,
+          quantity: Number(cart[product.id])
+        }));
+
+      const totalQuantity = items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+
+      const totalPrice = items.reduce(
+        (sum, item) =>
+          sum + Number(item.price) * item.quantity,
+        0
+      );
+
+      headerCartCount.textContent = totalQuantity;
+      checkoutItemCount.textContent =
+        totalQuantity.toLocaleString("bn-BD") + " টি";
+
+      cartItemBadge.textContent =
+        totalQuantity === 1
+          ? "1 item"
+          : `${totalQuantity.toLocaleString("bn-BD")} item`;
+
+      grandTotal.textContent = money(totalPrice);
+
+      if (!items.length) {
+        cartItems.innerHTML = "";
+        emptyCart.classList.remove("hidden");
+        return;
+      }
+
+      emptyCart.classList.add("hidden");
+
+      cartItems.innerHTML = items
+        .map(
+          (item) => `
+          <div class="p-4 flex gap-3">
+
+            <img
+              src="${escapeHTML(item.image)}"
+              alt="${escapeHTML(item.name)}"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover bg-slate-100 shrink-0"
+              onerror="this.style.visibility='hidden'"
+            />
+
+            <div class="flex-1 min-w-0">
+
+              <h3 class="font-bold text-sm sm:text-base truncate">
+                ${escapeHTML(item.name)}
+              </h3>
+
+              <p class="text-green-700 font-semibold text-sm mt-1">
+                ${money(item.price)}
+              </p>
+
+              <div class="flex items-center justify-between gap-2 mt-2">
+
+                <div class="flex items-center gap-1">
+
+                  <button
+                    type="button"
+                    onclick="changeQuantity('${item.id}', -1)"
+                    class="quantity-btn w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200"
+                  >
+                    <i class="fa-solid fa-minus text-xs"></i>
+                  </button>
+
+                  <span class="w-7 text-center text-sm font-bold">
+                    ${item.quantity}
+                  </span>
+
+                  <button
+                    type="button"
+                    onclick="changeQuantity('${item.id}', 1)"
+                    class="quantity-btn w-8 h-8 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <i class="fa-solid fa-plus text-xs"></i>
+                  </button>
+
+                </div>
+
+                <strong class="text-sm">
+                  ${money(item.price * item.quantity)}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+        `
+        )
+        .join("");
+    }
+
+
+    /*
+      ==========================================================
+      ADMIN PANEL
+      ==========================================================
+    */
+
+    function openPinModal() {
+      pinModal.classList.remove("hidden");
+      adminPin.value = "";
+      pinError.classList.add("hidden");
+
+      setTimeout(() => {
+        adminPin.focus();
+      }, 100);
+    }
+
+    function closePinModal() {
+      pinModal.classList.add("hidden");
+    }
+
+    function openAdminPanel() {
+      adminSection.classList.remove("hidden");
+
+      adminSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      renderAdminProducts();
+    }
+
+    function closeAdminPanel() {
+      adminSection.classList.add("hidden");
+    }
+
+
+    /*
+      Admin product editor.
+    */
+
+    function renderAdminProducts() {
+      const products = getProducts();
+
+      if (!products.length) {
+        adminProductList.innerHTML = `
+          <div class="bg-white/5 rounded-xl p-5 text-center text-slate-400">
+            কোনো পণ্য নেই।
+          </div>
+        `;
+
+        return;
+      }
+
+      adminProductList.innerHTML = products
+        .map(
+          (product) => `
+          <div
+            class="bg-white/5 border border-white/10 rounded-xl p-4"
+            data-admin-id="${escapeHTML(product.id)}"
+          >
+
+            <div class="flex flex-col md:flex-row gap-4">
+
+              <img
+                src="${escapeHTML(product.image)}"
+                alt=""
+                class="w-20 h-20 rounded-xl object-cover bg-white/10 shrink-0"
+                onerror="this.style.opacity='.3'"
+              />
+
+              <div class="flex-1 grid sm:grid-cols-2 gap-3">
+
+                <div>
+                  <label class="block text-xs text-slate-400 mb-1">
+                    পণ্যের নাম
+                  </label>
+
+                  <input
+                    id="edit-name-${escapeHTML(product.id)}"
+                    value="${escapeHTML(product.name)}"
+                    class="w-full px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white focus:border-green-400"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-xs text-slate-400 mb-1">
+                    মূল্য
+                  </label>
+
+                  <input
+                    id="edit-price-${escapeHTML(product.id)}"
+                    type="number"
+                    min="0"
+                    value="${Number(product.price)}"
+                    class="w-full px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white focus:border-green-400"
+                  />
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label class="block text-xs text-slate-400 mb-1">
+                    Image URL
+                  </label>
+
+                  <input
+                    id="edit-image-${escapeHTML(product.id)}"
+                    type="url"
+                    value="${escapeHTML(product.image)}"
+                    class="w-full px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white focus:border-green-400"
+                  />
+                </div>
+
+              </div>
+
+              <div class="flex md:flex-col gap-2 justify-end">
+
+                <button
+                  type="button"
+                  onclick="updateProduct('${product.id}')"
+                  class="px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-bold"
+                >
+                  <i class="fa-solid fa-floppy-disk mr-1"></i>
+                  Save
+                </button>
+
+                <button
+                  type="button"
+                  onclick="deleteProduct('${product.id}')"
+                  class="px-4 py-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 text-sm font-bold"
+                >
+                  <i class="fa-solid fa-trash mr-1"></i>
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        `
+        )
+        .join("");
+    }
+
+
+    /*
+      Add new product.
+    */
+
+    $("#addProductForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const name = $("#newProductName").value.trim();
+      const price = Number($("#newProductPrice").value);
+      const image = $("#newProductImage").value.trim();
+
+      if (!name || !image || !Number.isFinite(price) || price < 0) {
+        showToast("সঠিক পণ্যের তথ্য দিন।");
+        return;
+      }
+
+      const products = getProducts();
+
+      products.push({
+        id: generateId(),
+        name,
+        price,
+        image
+      });
+
+      saveProducts(products);
+
+      this.reset();
+
+      renderProducts();
+      renderCart();
+      renderAdminProducts();
+
+      showToast("নতুন পণ্য যোগ হয়েছে।");
+    });
+
+
+    /*
+      Update product.
+    */
+
+    function updateProduct(productId) {
+      const products = getProducts();
+
+      const product = products.find(
+        (item) => item.id === productId
+      );
+
+      if (!product) {
+        return;
+      }
+
+      const name = $(`#edit-name-${productId}`).value.trim();
+      const price = Number(
+        $(`#edit-price-${productId}`).value
+      );
+      const image = $(`#edit-image-${productId}`).value.trim();
+
+      if (!name || !image || !Number.isFinite(price) || price < 0) {
+        showToast("সঠিক তথ্য দিন।");
+        return;
+      }
+
+      product.name = name;
+      product.price = price;
+      product.image = image;
+
+      saveProducts(products);
+
+      renderProducts();
+      renderCart();
+      renderAdminProducts();
+
+      showToast("পণ্যের তথ্য আপডেট হয়েছে।");
+    }
+
+
+    /*
+      Delete product.
+    */
+
+    function deleteProduct(productId) {
+      const products = getProducts();
+
+      const product = products.find(
+        (item) => item.id === productId
+      );
+
+      if (!product) {
+        return;
+      }
+
+      const confirmed = confirm(
+        `"${product.name}" পণ্যটি মুছে ফেলতে চান?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const nextProducts = products.filter(
+        (item) => item.id !== productId
+      );
+
+      saveProducts(nextProducts);
+
+      const cart = getCart();
+      delete cart[productId];
+      saveCart(cart);
+
+      renderProducts();
+      renderCart();
+      renderAdminProducts();
+
+      showToast("পণ্য মুছে ফেলা হয়েছে।");
+    }
+
+
+    /*
+      Reset products.
+    */
+
+    $("#resetProductsBtn").addEventListener("click", function () {
+      const confirmed = confirm(
+        "সব বর্তমান পণ্য মুছে ডিফল্ট পণ্য ফিরিয়ে আনবেন?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      saveProducts([...DEFAULT_PRODUCTS]);
+
+      saveCart({});
+
+      renderProducts();
+      renderCart();
+      renderAdminProducts();
+
+      showToast("ডিফল্ট পণ্য ফিরিয়ে আনা হয়েছে।");
+    });
+
+
+    /*
+      ==========================================================
+      ADMIN LOGIN EVENTS
+      ==========================================================
+    */
+
+    $("#adminToggleBtn").addEventListener(
+      "click",
+      openPinModal
+    );
+
+    $("#mobileAdminBtn").addEventListener(
+      "click",
+      openPinModal
+    );
+
+    $("#closeAdminBtn").addEventListener(
+      "click",
+      closeAdminPanel
+    );
+
+    $("#cancelPinBtn").addEventListener(
+      "click",
+      closePinModal
+    );
+
+    pinModal.addEventListener("click", function (event) {
+      if (event.target === pinModal) {
+        closePinModal();
+      }
+    });
+
+    pinForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (adminPin.value === ADMIN_PIN) {
+        closePinModal();
+        openAdminPanel();
+      } else {
+        pinError.classList.remove("hidden");
+        adminPin.select();
+      }
+    });
+
+
+    /*
+      ==========================================================
+      CHECKOUT / INVOICE
+      ==========================================================
+    */
+
+    function getCartItems() {
+      const products = getProducts();
+      const cart = getCart();
+
+      return products
+        .filter((product) => Number(cart[product.id] || 0) > 0)
+        .map((product) => ({
+          ...product,
+          quantity: Number(cart[product.id])
+        }));
+    }
+
+
+    function buildInvoice(customer) {
+      const items = getCartItems();
+
+      const total = items.reduce(
+        (sum, item) =>
+          sum + Number(item.price) * item.quantity,
+        0
+      );
+
+      const orderId =
+        "AQ" +
+        Date.now().toString().slice(-8);
+
+      const orderDate = new Date().toLocaleString(
+        "bn-BD",
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }
+      );
+
+      const lines = [];
+
+      lines.push(`*${STORE_NAME}*`);
+      lines.push(`━━━━━━━━━━━━━━━━━━━━`);
+      lines.push(`🧾 *অর্ডার ইনভয়েস*`);
+      lines.push(`অর্ডার আইডি: ${orderId}`);
+      lines.push(`তারিখ: ${orderDate}`);
+      lines.push(`━━━━━━━━━━━━━━━━━━━━`);
+      lines.push(``);
+      lines.push(`*পণ্যের বিবরণ:*`);
+
+      items.forEach((item, index) => {
+        const subtotal =
+          Number(item.price) * item.quantity;
+
+        lines.push(
+          `${index + 1}. ${item.name}`
+        );
+
+        lines.push(
+          `   ${item.quantity} × ${money(item.price)} = ${money(subtotal)}`
+        );
+      });
+
+      lines.push(``);
+      lines.push(`━━━━━━━━━━━━━━━━━━━━`);
+      lines.push(`💰 *সর্বমোট: ${money(total)}*`);
+      lines.push(`━━━━━━━━━━━━━━━━━━━━`);
+      lines.push(``);
+      lines.push(`*কাস্টমার তথ্য:*`);
+      lines.push(`👤 নাম: ${customer.name}`);
+      lines.push(`📞 ফোন: ${customer.phone}`);
+      lines.push(`📍 ঠিকানা: ${customer.address}`);
+      lines.push(``);
+      lines.push(`ধন্যবাদ ❤️`);
+      lines.push(`${STORE_NAME}`);
+
+      return lines.join("\n");
+    }
+
+
+    /*
+      Confirm order -> WhatsApp.
+    */
+
+    $("#checkoutForm").addEventListener(
+      "submit",
+      function (event) {
+        event.preventDefault();
+
+        const items = getCartItems();
+
+        if (!items.length) {
+          showToast("প্রথমে কার্টে অন্তত একটি পণ্য যোগ করুন।");
+          document
+            .getElementById("products")
+            .scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+
+        const customer = {
+          name: $("#customerName").value.trim(),
+          phone: $("#customerPhone").value.trim(),
+          address: $("#deliveryAddress").value.trim()
+        };
+
+        if (
+          !customer.name ||
+          !customer.phone ||
+          !customer.address
+        ) {
+          showToast("সব কাস্টমার তথ্য পূরণ করুন।");
+          return;
+        }
+
+        const invoice = buildInvoice(customer);
+
+        const whatsappURL =
+          "https://wa.me/" +
+          WHATSAPP_NUMBER +
+          "?text=" +
+          encodeURIComponent(invoice);
+
+        /*
+          Open WhatsApp in a new tab.
+          On mobile, this normally opens the WhatsApp app.
+        */
+        window.open(whatsappURL, "_blank", "noopener,noreferrer");
+      }
+    );
+
+
+    /*
+      ==========================================================
+      MESSENGER SHARING
+      ==========================================================
+      Messenger does not provide a universal public API for
+      sending arbitrary text directly to a personal inbox
+      without a Facebook App/Page setup.
+
+      Therefore this button uses the native Web Share API where
+      available and falls back to Facebook sharing.
+    */
+
+    $("#messengerBtn").addEventListener(
+      "click",
+      async function () {
+        const items = getCartItems();
+
+        if (!items.length) {
+          showToast("প্রথমে কার্টে পণ্য যোগ করুন।");
+          return;
+        }
+
+        const name = $("#customerName").value.trim();
+        const phone = $("#customerPhone").value.trim();
+        const address = $("#deliveryAddress").value.trim();
+
+        const customer = {
+          name: name || "Customer",
+          phone: phone || "Not provided",
+          address: address || "Not provided"
+        };
+
+        const invoice = buildInvoice(customer);
+
+        /*
+          If browser supports Web Share, the user can choose
+          Messenger from the native sharing sheet.
+        */
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: STORE_NAME + " - Order",
+              text: invoice,
+              url: window.location.href
+            });
+
+            return;
+          } catch (error) {
+            /*
+              User may have cancelled the native share dialog.
+              No action required.
+            */
+
+            if (error.name === "AbortError") {
+              return;
+            }
+          }
+        }
+
+        /*
+          Fallback: Facebook share page.
+        */
+        const shareURL =
+          "https://www.facebook.com/sharer/sharer.php?u=" +
+          encodeURIComponent(window.location.href);
+
+        window.open(
+          shareURL,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+    );
+
+
+    /*
+      ==========================================================
+      INITIALIZATION
+      ==========================================================
+    */
+
+    $("#currentYear").textContent =
+      new Date().getFullYear();
+
+    // Initialize default products if needed.
+    getProducts();
+
+    // Initial rendering.
+    renderProducts();
+    renderCart();
+
+  </script>
+
+</body>
+</html>
