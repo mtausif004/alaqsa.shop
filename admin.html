@@ -912,87 +912,135 @@
     */
 
     document
-      .getElementById("addProductForm")
-      .addEventListener(
-        "submit",
-        async event => {
+  .getElementById("addProductForm")
+  .addEventListener("submit", async event => {
 
-          event.preventDefault();
+    event.preventDefault();
 
+    const name =
+      document
+        .getElementById("productName")
+        .value
+        .trim();
 
-          const name =
-            document
-              .getElementById("productName")
-              .value
-              .trim();
+    const price =
+      Number(
+        document
+          .getElementById("productPrice")
+          .value
+      );
 
-
-          const price =
-            Number(
-              document
-                .getElementById("productPrice")
-                .value
-            );
-
-
-          const image =
-            document
-              .getElementById("productImage")
-              .value
-              .trim();
+    const imageFile =
+      document
+        .getElementById("productImage")
+        .files[0];
 
 
-          if (
-            !name ||
-            !image ||
-            !Number.isFinite(price) ||
-            price < 0
-          ) {
-
-            showToast(
-              "সঠিক product information দিন।"
-            );
-
-            return;
-
-          }
+    // নাম পরীক্ষা
+    if (!name) {
+      showToast("পণ্যের নাম দিন।");
+      return;
+    }
 
 
-          try {
-
-            await addDoc(
-              productsRef,
-              {
-
-                name,
-                price,
-                image,
-
-                createdAt:
-                  serverTimestamp()
-
-              }
-            );
+    // মূল্য পরীক্ষা
+    if (!Number.isFinite(price) || price < 0) {
+      showToast("সঠিক মূল্য দিন।");
+      return;
+    }
 
 
-            event.target.reset();
+    // ছবি পরীক্ষা
+    if (!imageFile) {
+      showToast("পণ্যের ছবি নির্বাচন করুন।");
+      return;
+    }
 
-            showToast(
-              "পণ্য সফলভাবে যোগ হয়েছে।"
-            );
 
-          } catch (error) {
+    // শুধু image গ্রহণ
+    if (!imageFile.type.startsWith("image/")) {
+      showToast("শুধু ছবি নির্বাচন করুন।");
+      return;
+    }
 
-            console.error(error);
 
-            showToast(
-              "পণ্য যোগ করা যায়নি।"
-            );
+    // সর্বোচ্চ 5MB
+    if (imageFile.size > 5 * 1024 * 1024) {
+      showToast("ছবির size 5MB-এর কম হতে হবে।");
+      return;
+    }
 
-          }
 
+    try {
+
+      showToast("ছবি Upload হচ্ছে...");
+
+
+      // ছবির নাম
+      const fileName =
+        Date.now() + "_" +
+        imageFile.name.replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+
+      // Firebase Storage location
+      const imageRef =
+        ref(
+          storage,
+          "products/" + fileName
+        );
+
+
+      // Firebase-এ ছবি upload
+      await uploadBytes(
+        imageRef,
+        imageFile
+      );
+
+
+      // Uploaded ছবির URL
+      const imageURL =
+        await getDownloadURL(imageRef);
+
+
+      // Firestore-এ product save
+      await addDoc(
+        productsRef,
+        {
+          name: name,
+
+          price: price,
+
+          image: imageURL,
+
+          createdAt:
+            serverTimestamp()
         }
       );
+
+
+      // Form খালি করা
+      event.target.reset();
+
+
+      showToast(
+        "✅ পণ্য সফলভাবে যোগ হয়েছে!"
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showToast(
+        "❌ পণ্য যোগ করা যায়নি। Console দেখুন।"
+      );
+
+    }
+
+  });
 
 
     /*
