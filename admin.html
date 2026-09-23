@@ -234,7 +234,7 @@
             </h2>
 
             <p class="text-sm text-slate-500">
-              Firestore real-time data + Cloudinary image hosting
+              Firestore-এর মাধ্যমে real-time product management
             </p>
 
           </div>
@@ -250,51 +250,6 @@
         </div>
 
       </div>
-
-
-      <!-- =========================================================
-           CLOUDINARY IMAGE SETUP
-           Firebase Storage is intentionally not used.
-      ========================================================== -->
-
-      <section
-        class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6"
-      >
-        <div class="mb-4">
-          <h2 class="text-xl font-bold">
-            <i class="fa-solid fa-cloud-arrow-up text-blue-600 mr-2"></i>
-            ছবি Upload Setup
-          </h2>
-          <p class="text-sm text-slate-500 mt-1">
-            Firebase Storage/কার্ড লাগবে না। Cloudinary-তে ছবি যাবে এবং ছবির URL Firestore-এ real-time save হবে।
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label for="cloudinaryCloudName" class="block text-sm font-semibold mb-1.5">Cloud Name</label>
-            <input id="cloudinaryCloudName" type="text" placeholder="যেমন: demo"
-              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50">
-          </div>
-          <div>
-            <label for="cloudinaryUploadPreset" class="block text-sm font-semibold mb-1.5">Unsigned Upload Preset</label>
-            <input id="cloudinaryUploadPreset" type="text" placeholder="যেমন: alaqsa_products"
-              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50">
-          </div>
-        </div>
-
-        <div class="mt-4 flex flex-wrap items-center gap-3">
-          <button id="saveCloudinaryBtn" type="button"
-            class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold">
-            <i class="fa-solid fa-floppy-disk mr-2"></i> Save Image Setup
-          </button>
-          <span id="cloudinaryStatus" class="text-xs font-bold text-orange-600">⚠️ Cloudinary setup বাকি</span>
-        </div>
-
-        <div class="mt-4 rounded-xl bg-blue-50 border border-blue-100 p-4 text-sm text-blue-800">
-          <b>নোট:</b> Cloudinary-তে <b>Unsigned Upload Preset</b> তৈরি করতে হবে। API Secret কখনো এখানে দেবেন না।
-        </div>
-      </section>
 
 
       <!-- ADD PRODUCT -->
@@ -376,7 +331,7 @@
               for="productImage"
               class="block text-sm font-semibold mb-1.5"
             >
-              পণ্যের ছবি
+              select image 
             </label>
 
             <input
@@ -397,7 +352,7 @@
               class="px-5 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition"
             >
               <i class="fa-solid fa-plus mr-2"></i>
-              পণ্য যোগ করুন
+              Firestore-এ পণ্য যোগ করুন
             </button>
 
           </div>
@@ -462,7 +417,11 @@
   ========================================================== -->
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
     import {
       getFirestore,
       collection,
@@ -474,334 +433,755 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ========================= Firebase Config =========================
-    // Firestore is used only for product data + real-time sync.
-    // Firebase Storage is NOT used, so no Firebase billing/Blaze plan is needed.
+    /*
+      ==========================================================
+      FIREBASE CONFIGURATION
+      ==========================================================
+
+      Replace these values with your Firebase project config.
+    */
+
     const firebaseConfig = {
+
       apiKey: "AIzaSyDO8qN7fhPD3dMagschwgFiiuXZpQ8i2Mw",
-      authDomain: "alasqashop.firebaseapp.com",
-      projectId: "alasqashop",
-      storageBucket: "alasqashop.firebasestorage.app",
-      messagingSenderId: "884076866207",
-      appId: "1:884076866207:web:0efaef3d51c00160b250aa"
+
+      authDomain:
+        "alasqashop.firebaseapp.com",
+
+      projectId:
+        "alasqashop",
+
+      storageBucket:
+        "alasqashop.firebasestorage.app",
+
+      messagingSenderId:
+        "884076866207",
+
+      appId:
+        "1:884076866207:web:0efaef3d51c00160b250aa"
+
     };
 
-    const ADMIN_PIN = "fkfk004";
-    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-    const CLOUDINARY_SETTINGS_KEY = "alqsa_cloudinary_settings";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const productsRef = collection(db, "products");
+    /*
+      ==========================================================
+      ADMIN SETTINGS
+      ==========================================================
+
+      IMPORTANT:
+      This PIN is NOT a secure server-side authentication system.
+      It is only a basic client-side gate.
+
+      For production security, use Firebase Authentication.
+    */
+
+    const ADMIN_PIN = "fkfk004";
+
+
+    /*
+      ==========================================================
+      FIREBASE
+    ==========================================================
+    */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const db =
+      getFirestore(app);
+
+    const productsRef =
+      collection(db, "products");
+
+
+    /*
+      ==========================================================
+      STATE
+    ==========================================================
+    */
 
     let products = [];
 
-    const loginScreen = document.getElementById("loginScreen");
-    const dashboard = document.getElementById("dashboard");
-    const loginForm = document.getElementById("loginForm");
-    const adminPassword = document.getElementById("adminPassword");
-    const loginError = document.getElementById("loginError");
-    const adminProductList = document.getElementById("adminProductList");
-    const adminProductCount = document.getElementById("adminProductCount");
-    const firebaseStatus = document.getElementById("firebaseStatus");
-    const toast = document.getElementById("toast");
+
+    /*
+      ==========================================================
+      DOM
+    ==========================================================
+    */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const dashboard =
+      document.getElementById("dashboard");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const adminPassword =
+      document.getElementById("adminPassword");
+
+    const loginError =
+      document.getElementById("loginError");
+
+    const adminProductList =
+      document.getElementById("adminProductList");
+
+    const adminProductCount =
+      document.getElementById("adminProductCount");
+
+    const firebaseStatus =
+      document.getElementById("firebaseStatus");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /*
+      ==========================================================
+      HELPERS
+    ==========================================================
+    */
 
     function money(value) {
-      return "৳" + Number(value || 0).toLocaleString("bn-BD");
+
+      return "৳" +
+        Number(value || 0).toLocaleString("bn-BD");
+
     }
 
+
     function escapeHTML(value) {
+
       return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
     }
+
 
     function showToast(message) {
+
       toast.textContent = message;
+
       toast.classList.remove("hidden");
+
       clearTimeout(window.toastTimer);
-      window.toastTimer = setTimeout(() => toast.classList.add("hidden"), 3500);
+
+      window.toastTimer =
+        setTimeout(() => {
+
+          toast.classList.add("hidden");
+
+        }, 2500);
+
     }
 
-    function setStatus(text, type = "ok") {
-      firebaseStatus.textContent = text;
-      const classes = {
-        ok: "px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold",
-        loading: "px-3 py-1.5 rounded-full bg-yellow-50 text-yellow-700 text-xs font-bold",
-        error: "px-3 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold"
-      };
-      firebaseStatus.className = classes[type] || classes.loading;
-    }
 
-    function getCloudinarySettings() {
-      try {
-        return JSON.parse(localStorage.getItem(CLOUDINARY_SETTINGS_KEY) || "{}");
-      } catch {
-        return {};
+    /*
+      ==========================================================
+      LOGIN
+    ==========================================================
+    */
+
+    loginForm.addEventListener(
+      "submit",
+      event => {
+
+        event.preventDefault();
+
+
+        if (
+          adminPassword.value === ADMIN_PIN
+        ) {
+
+          sessionStorage.setItem(
+            "alqsa_admin_authenticated",
+            "true"
+          );
+
+
+          loginScreen.classList.add("hidden");
+
+          dashboard.classList.remove("hidden");
+
+
+          adminPassword.value = "";
+
+        } else {
+
+          loginError.classList.remove("hidden");
+
+          adminPassword.select();
+
+        }
+
       }
-    }
+    );
 
-    function saveCloudinarySettings() {
-      const cloudName = document.getElementById("cloudinaryCloudName").value.trim();
-      const uploadPreset = document.getElementById("cloudinaryUploadPreset").value.trim();
-      if (!cloudName || !uploadPreset) {
-        showToast("Cloud Name এবং Upload Preset দুটোই দিন।");
-        return;
-      }
-      localStorage.setItem(CLOUDINARY_SETTINGS_KEY, JSON.stringify({ cloudName, uploadPreset }));
-      updateCloudinaryStatus();
-      showToast("✅ Image upload settings saved হয়েছে।");
-    }
 
-    function loadCloudinarySettings() {
-      const settings = getCloudinarySettings();
-      document.getElementById("cloudinaryCloudName").value = settings.cloudName || "";
-      document.getElementById("cloudinaryUploadPreset").value = settings.uploadPreset || "";
-      updateCloudinaryStatus();
-    }
+    /*
+      ==========================================================
+      SESSION CHECK
+    ==========================================================
+    */
 
-    function updateCloudinaryStatus() {
-      const settings = getCloudinarySettings();
-      const el = document.getElementById("cloudinaryStatus");
-      if (settings.cloudName && settings.uploadPreset) {
-        el.textContent = "● Image Upload Ready";
-        el.className = "text-xs font-bold text-green-700";
-      } else {
-        el.textContent = "⚠️ Cloudinary setup বাকি";
-        el.className = "text-xs font-bold text-orange-600";
-      }
-    }
+    function checkAdminSession() {
 
-    async function uploadProductImage(file) {
-      if (!file) throw new Error("NO_IMAGE");
-      if (!file.type.startsWith("image/")) throw new Error("INVALID_IMAGE_TYPE");
-      if (file.size > MAX_IMAGE_SIZE) throw new Error("IMAGE_TOO_LARGE");
+      const authenticated =
+        sessionStorage.getItem(
+          "alqsa_admin_authenticated"
+        );
 
-      const { cloudName, uploadPreset } = getCloudinarySettings();
-      if (!cloudName || !uploadPreset) throw new Error("CLOUDINARY_NOT_CONFIGURED");
 
-      const endpoint = `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`;
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", uploadPreset);
+      if (authenticated === "true") {
 
-      const response = await fetch(endpoint, { method: "POST", body: formData });
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok || !data.secure_url) {
-        console.error("Cloudinary upload response:", data);
-        const message = data?.error?.message || `Cloudinary upload failed (${response.status})`;
-        throw new Error(message);
-      }
-
-      return {
-        url: data.secure_url,
-        publicId: data.public_id || "",
-        resourceType: data.resource_type || "image"
-      };
-    }
-
-    // ========================= Login =========================
-    loginForm.addEventListener("submit", event => {
-      event.preventDefault();
-      if (adminPassword.value === ADMIN_PIN) {
-        sessionStorage.setItem("alqsa_admin_authenticated", "true");
-        loginError.classList.add("hidden");
         loginScreen.classList.add("hidden");
-        dashboard.classList.remove("hidden");
-        adminPassword.value = "";
-        loadCloudinarySettings();
-      } else {
-        loginError.classList.remove("hidden");
-        adminPassword.select();
-      }
-    });
 
-    if (sessionStorage.getItem("alqsa_admin_authenticated") === "true") {
-      loginScreen.classList.add("hidden");
-      dashboard.classList.remove("hidden");
-      loadCloudinarySettings();
+        dashboard.classList.remove("hidden");
+
+      }
+
     }
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      sessionStorage.removeItem("alqsa_admin_authenticated");
-      location.reload();
-    });
 
-    document.getElementById("saveCloudinaryBtn").addEventListener("click", saveCloudinarySettings);
+    checkAdminSession();
 
-    // ========================= Real-time Firestore =========================
-    setStatus("Connecting...", "loading");
 
-    onSnapshot(productsRef, snapshot => {
-      products = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-      products.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-      setStatus("● Firebase Connected", "ok");
-      renderAdminProducts();
-    }, error => {
-      console.error("Firestore onSnapshot error:", error);
-      setStatus("Firebase Error", "error");
-      adminProductList.innerHTML = `
-        <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-6 text-center">
-          <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
-          <p class="font-bold mt-2">Firestore data পাওয়া যাচ্ছে না।</p>
-          <p class="text-sm mt-1">Firestore Rules এবং Firebase config পরীক্ষা করুন।</p>
-          <p class="text-xs mt-2 break-all">${escapeHTML(error.code || error.message || "Unknown error")}</p>
-        </div>`;
-    });
+    /*
+      ==========================================================
+      LOGOUT
+    ==========================================================
+    */
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          sessionStorage.removeItem(
+            "alqsa_admin_authenticated"
+          );
+
+          location.reload();
+
+        }
+      );
+
+
+    /*
+      ==========================================================
+      REAL-TIME PRODUCTS
+    ==========================================================
+    */
+
+    onSnapshot(
+      productsRef,
+
+      snapshot => {
+
+        products =
+          snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
+
+        products.sort((a, b) => {
+
+          const aTime =
+            a.createdAt?.seconds || 0;
+
+          const bTime =
+            b.createdAt?.seconds || 0;
+
+          return bTime - aTime;
+
+        });
+
+
+        firebaseStatus.textContent =
+          "● Firebase Connected";
+
+        firebaseStatus.className =
+          "px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold";
+
+
+        renderAdminProducts();
+
+      },
+
+      error => {
+
+        console.error(error);
+
+        firebaseStatus.textContent =
+          "Firebase Error";
+
+        firebaseStatus.className =
+          "px-3 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold";
+
+
+        adminProductList.innerHTML = `
+
+          <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-6 text-center">
+
+            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+
+            <p class="font-bold mt-2">
+              Firestore data পাওয়া যাচ্ছে না।
+            </p>
+
+            <p class="text-sm mt-1">
+              Firebase configuration এবং Security Rules পরীক্ষা করুন।
+            </p>
+
+          </div>
+
+        `;
+
+      }
+
+    );
+
+
+    /*
+      ==========================================================
+      RENDER ADMIN PRODUCTS
+    ==========================================================
+    */
 
     function renderAdminProducts() {
-      adminProductCount.textContent = products.length;
+
+      adminProductCount.textContent =
+        products.length;
+
 
       if (!products.length) {
+
         adminProductList.innerHTML = `
-          <div class="bg-white border border-slate-200 rounded-2xl p-10 text-center">
-            <div class="w-16 h-16 mx-auto rounded-full bg-slate-100 flex items-center justify-center">
+
+          <div
+            class="bg-white border border-slate-200 rounded-2xl p-10 text-center"
+          >
+
+            <div
+              class="w-16 h-16 mx-auto rounded-full bg-slate-100 flex items-center justify-center"
+            >
               <i class="fa-solid fa-box-open text-2xl text-slate-400"></i>
             </div>
-            <h3 class="font-bold mt-4">এখনো কোনো পণ্য নেই</h3>
-            <p class="text-sm text-slate-500 mt-1">উপরের form ব্যবহার করে প্রথম পণ্য যোগ করুন।</p>
-          </div>`;
+
+            <h3 class="font-bold mt-4">
+              এখনো কোনো পণ্য নেই
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+              উপরের form ব্যবহার করে প্রথম পণ্য যোগ করুন।
+            </p>
+
+          </div>
+
+        `;
+
         return;
+
       }
 
-      adminProductList.innerHTML = products.map(product => `
-        <article class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-          <div class="flex flex-col lg:flex-row gap-4">
-            <div class="shrink-0">
-              <img src="${escapeHTML(product.image || "")}" alt="${escapeHTML(product.name)}"
-                class="w-24 h-24 rounded-xl object-cover bg-slate-100"
-                onerror="this.style.opacity='.35'">
-            </div>
-            <div class="flex-1 grid sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">পণ্যের নাম</label>
-                <input id="name-${product.id}" value="${escapeHTML(product.name)}"
-                  class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50">
+
+      adminProductList.innerHTML =
+        products.map(product => `
+
+          <article
+            class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4"
+          >
+
+            <div class="flex flex-col lg:flex-row gap-4">
+
+              <!-- IMAGE -->
+
+              <img
+                src="${escapeHTML(product.image)}"
+                alt="${escapeHTML(product.name)}"
+                class="w-24 h-24 rounded-xl object-cover bg-slate-100 shrink-0"
+                onerror="this.style.opacity='.4'"
+              >
+
+
+              <!-- FORM -->
+
+              <div class="flex-1 grid sm:grid-cols-2 gap-3">
+
+                <div>
+
+                  <label
+                    class="block text-xs font-semibold text-slate-500 mb-1"
+                  >
+                    পণ্যের নাম
+                  </label>
+
+                  <input
+                    id="name-${product.id}"
+                    value="${escapeHTML(product.name)}"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  >
+
+                </div>
+
+
+                <div>
+
+                  <label
+                    class="block text-xs font-semibold text-slate-500 mb-1"
+                  >
+                    মূল্য
+                  </label>
+
+                  <input
+                    id="price-${product.id}"
+                    type="number"
+                    min="0"
+                    value="${Number(product.price)}"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  >
+
+                </div>
+
+
+                <div class="sm:col-span-2">
+
+                  <label
+                    class="block text-xs font-semibold text-slate-500 mb-1"
+                  >
+                    Image URL
+                  </label>
+
+                  <input
+                    id="image-${product.id}"
+                    type="url"
+                    value="${escapeHTML(product.image)}"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  >
+
+                </div>
+
               </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">মূল্য</label>
-                <input id="price-${product.id}" type="number" min="0" step="1" value="${Number(product.price) || 0}"
-                  class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50">
+
+
+              <!-- ACTIONS -->
+
+              <div class="flex lg:flex-col gap-2 justify-end">
+
+                <button
+                  type="button"
+                  onclick="updateProduct('${product.id}')"
+                  class="px-4 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm"
+                >
+                  <i class="fa-solid fa-floppy-disk mr-1"></i>
+                  Save
+                </button>
+
+
+                <button
+                  type="button"
+                  onclick="deleteProduct('${product.id}')"
+                  class="px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-sm"
+                >
+                  <i class="fa-solid fa-trash mr-1"></i>
+                  Delete
+                </button>
+
               </div>
-              <div class="sm:col-span-2">
-                <label class="block text-xs font-semibold text-slate-500 mb-1">নতুন ছবি (ঐচ্ছিক)</label>
-                <input id="image-file-${product.id}" type="file" accept="image/*"
-                  class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                <p class="text-xs text-slate-400 mt-1">নতুন ছবি না দিলে বর্তমান ছবিই থাকবে।</p>
-              </div>
+
             </div>
-            <div class="flex lg:flex-col gap-2 justify-end">
-              <button type="button" onclick="updateProduct('${product.id}')"
-                class="px-4 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm">
-                <i class="fa-solid fa-floppy-disk mr-1"></i> Save
-              </button>
-              <button type="button" onclick="deleteProduct('${product.id}')"
-                class="px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-sm">
-                <i class="fa-solid fa-trash mr-1"></i> Delete
-              </button>
-            </div>
-          </div>
-        </article>`).join("");
+
+          </article>
+
+        `).join("");
+
     }
 
-    // ========================= Add Product =========================
-    document.getElementById("addProductForm").addEventListener("submit", async event => {
-      event.preventDefault();
 
-      const button = event.submitter || event.target.querySelector('button[type="submit"]');
-      const name = document.getElementById("productName").value.trim();
-      const price = Number(document.getElementById("productPrice").value);
-      const imageFile = document.getElementById("productImage").files[0];
+    /*
+      ==========================================================
+      ADD PRODUCT
+    ==========================================================
+    */
 
-      if (!name) return showToast("পণ্যের নাম দিন।");
-      if (!Number.isFinite(price) || price < 0) return showToast("সঠিক মূল্য দিন।");
-      if (!imageFile) return showToast("পণ্যের ছবি নির্বাচন করুন।");
+    document
+  .getElementById("addProductForm")
+  .addEventListener("submit", async event => {
 
-      const oldText = button.innerHTML;
-      button.disabled = true;
-      button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> ছবি Upload হচ্ছে...';
+    event.preventDefault();
 
-      try {
-        const uploaded = await uploadProductImage(imageFile);
-        await addDoc(productsRef, {
-          name,
-          price,
-          image: uploaded.url,
-          cloudinaryPublicId: uploaded.publicId,
-          createdAt: serverTimestamp()
-        });
-        event.target.reset();
-        showToast("✅ পণ্য সফলভাবে যোগ হয়েছে!");
-      } catch (error) {
-        console.error("Add product error:", error);
-        const messages = {
-          "NO_IMAGE": "ছবি নির্বাচন করুন।",
-          "INVALID_IMAGE_TYPE": "শুধু image file upload করুন।",
-          "IMAGE_TOO_LARGE": "ছবির size সর্বোচ্চ 5MB হতে পারবে।",
-          "CLOUDINARY_NOT_CONFIGURED": "আগে Cloudinary Cloud Name ও Upload Preset সেট করুন।",
-          "permission-denied": "Firestore write permission denied."
-        };
-        showToast("❌ " + (messages[error.code] || error.message || "পণ্য যোগ করা যায়নি।"));
-      } finally {
-        button.disabled = false;
-        button.innerHTML = oldText;
+    const name =
+      document
+        .getElementById("productName")
+        .value
+        .trim();
+
+    const price =
+      Number(
+        document
+          .getElementById("productPrice")
+          .value
+      );
+
+    const imageFile =
+      document
+        .getElementById("productImage")
+        .files[0];
+
+
+    // নাম পরীক্ষা
+    if (!name) {
+      showToast("পণ্যের নাম দিন।");
+      return;
+    }
+
+
+    // মূল্য পরীক্ষা
+    if (!Number.isFinite(price) || price < 0) {
+      showToast("সঠিক মূল্য দিন।");
+      return;
+    }
+
+
+    // ছবি পরীক্ষা
+    if (!imageFile) {
+      showToast("পণ্যের ছবি নির্বাচন করুন।");
+      return;
+    }
+
+
+    // শুধু image গ্রহণ
+    if (!imageFile.type.startsWith("image/")) {
+      showToast("শুধু ছবি নির্বাচন করুন।");
+      return;
+    }
+
+
+    // সর্বোচ্চ 5MB
+    if (imageFile.size > 5 * 1024 * 1024) {
+      showToast("ছবির size 5MB-এর কম হতে হবে।");
+      return;
+    }
+
+
+    try {
+
+      showToast("ছবি Upload হচ্ছে...");
+
+
+      // Cloudinary unsigned browser upload.
+      // Firebase Storage is intentionally NOT used, so Blaze billing is not required.
+      const CLOUDINARY_CLOUD_NAME = "pvzr4jn9";
+      const CLOUDINARY_UPLOAD_PRESET = "alaqsa_shop";
+
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      const uploadResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+
+      const uploadResult = await uploadResponse.json();
+
+      if (!uploadResponse.ok || !uploadResult.secure_url) {
+        throw new Error(uploadResult.error?.message || "Cloudinary image upload failed");
       }
-    });
 
-    // ========================= Update Product =========================
-    window.updateProduct = async function(productId) {
-      const product = products.find(item => item.id === productId);
-      if (!product) return;
+      const imageURL = uploadResult.secure_url;
 
-      const name = document.getElementById(`name-${productId}`).value.trim();
-      const price = Number(document.getElementById(`price-${productId}`).value);
-      const imageFile = document.getElementById(`image-file-${productId}`).files[0];
 
-      if (!name) return showToast("পণ্যের নাম দিন।");
-      if (!Number.isFinite(price) || price < 0) return showToast("সঠিক মূল্য দিন।");
-      if (imageFile && !imageFile.type.startsWith("image/")) return showToast("শুধু image file upload করুন।");
-      if (imageFile && imageFile.size > MAX_IMAGE_SIZE) return showToast("ছবির size সর্বোচ্চ 5MB হতে পারবে।");
+      // Firestore-এ product save
+      await addDoc(
+        productsRef,
+        {
+          name: name,
 
-      try {
-        let uploaded = null;
-        if (imageFile) {
-          showToast("নতুন ছবি Upload হচ্ছে...");
-          uploaded = await uploadProductImage(imageFile);
+          price: price,
+
+          image: imageURL,
+
+          createdAt:
+            serverTimestamp()
+        }
+      );
+
+
+      // Form খালি করা
+      event.target.reset();
+
+
+      showToast(
+        "✅ পণ্য সফলভাবে যোগ হয়েছে!"
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showToast(
+        "❌ পণ্য যোগ করা যায়নি। Console দেখুন।"
+      );
+
+    }
+
+  });
+
+
+    /*
+      ==========================================================
+      UPDATE PRODUCT
+    ==========================================================
+    */
+
+    window.updateProduct =
+      async function(productId) {
+
+        const name =
+          document
+            .getElementById(
+              `name-${productId}`
+            )
+            .value
+            .trim();
+
+
+        const price =
+          Number(
+            document
+              .getElementById(
+                `price-${productId}`
+              )
+              .value
+          );
+
+
+        const image =
+          document
+            .getElementById(
+              `image-${productId}`
+            )
+            .value
+            .trim();
+
+
+        if (
+          !name ||
+          !image ||
+          !Number.isFinite(price) ||
+          price < 0
+        ) {
+
+          showToast(
+            "সঠিক product information দিন।"
+          );
+
+          return;
+
         }
 
-        const updateData = { name, price };
-        if (uploaded) {
-          updateData.image = uploaded.url;
-          updateData.cloudinaryPublicId = uploaded.publicId;
+
+        try {
+
+          await updateDoc(
+            doc(
+              db,
+              "products",
+              productId
+            ),
+            {
+              name,
+              price,
+              image
+            }
+          );
+
+
+          showToast(
+            "পণ্যের তথ্য আপডেট হয়েছে।"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          showToast(
+            "পণ্য update করা যায়নি।"
+          );
+
         }
 
-        await updateDoc(doc(db, "products", productId), updateData);
-        showToast("✅ পণ্যের তথ্য আপডেট হয়েছে।");
-      } catch (error) {
-        console.error("Update product error:", error);
-        showToast("❌ " + (error.message || "পণ্য update করা যায়নি।"));
-      }
-    };
+      };
 
-    // ========================= Delete Product =========================
-    window.deleteProduct = async function(productId) {
-      const product = products.find(item => item.id === productId);
-      if (!product) return;
-      if (!confirm(`"${product.name}" পণ্যটি delete করতে চান?`)) return;
 
-      try {
-        await deleteDoc(doc(db, "products", productId));
-        // Cloudinary assets are not deleted from the browser because deletion requires a server-side secret.
-        showToast("✅ পণ্য delete হয়েছে।");
-      } catch (error) {
-        console.error("Delete product error:", error);
-        showToast("❌ " + (error.message || "পণ্য delete করা যায়নি।"));
-      }
-    };
+    /*
+      ==========================================================
+      DELETE PRODUCT
+    ==========================================================
+    */
+
+    window.deleteProduct =
+      async function(productId) {
+
+        const product =
+          products.find(
+            item =>
+              item.id === productId
+          );
+
+
+        if (!product) {
+          return;
+        }
+
+
+        const confirmed =
+          confirm(
+            `"${product.name}" পণ্যটি delete করতে চান?`
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        try {
+
+          await deleteDoc(
+            doc(
+              db,
+              "products",
+              productId
+            )
+          );
+
+
+          showToast(
+            "পণ্য delete হয়েছে।"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          showToast(
+            "পণ্য delete করা যায়নি।"
+          );
+
+        }
+
+      };
+
   </script>
 
 </body>
