@@ -292,7 +292,7 @@
               id="productName"
               type="text"
               required
-              placeholder="যেমন: বার্মিজ আচার"
+              placeholder="যেমন: পণ্যের নাম"
               class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
             >
 
@@ -331,15 +331,15 @@
               for="productImage"
               class="block text-sm font-semibold mb-1.5"
             >
-              Image URL
+              select image 
             </label>
 
             <input
               id="productImage"
-              type="url"
-              required
-              placeholder="https://..."
-              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+              type="file"
+  						accept="image/*"
+  						required
+  						class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50"
             >
 
           </div>
@@ -424,16 +424,11 @@
 
 
     import {
-      getFirestore,
-      collection,
-      addDoc,
-      updateDoc,
-      deleteDoc,
-      doc,
-      onSnapshot,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
+  		getStorage,
+  		ref,
+  		uploadBytes,
+ 		 	getDownloadURL
+		} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
     /*
       ==========================================================
@@ -491,7 +486,9 @@
 
     const db =
       getFirestore(app);
-
+    
+		const storage =
+  		getStorage(app);
 
     const productsRef =
       collection(db, "products");
