@@ -1,5 +1,17 @@
 {
-  "products": [],
+  "products": [
+    {
+      "id": "Ppl",
+      "name": "Kk",
+      "price": 0,
+      "comparePrice": 0,
+      "description": "",
+      "specs": [],
+      "images": [],
+      "active": true,
+      "featured": false
+    }
+  ],
   "coupons": [
     {
       "code": "KIRE",
