@@ -22,7 +22,7 @@
 <div class="rounded-[1.75rem] bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-widest text-slate-400">Catalog</p><h2 class="text-xl font-black">Product List</h2><p id="count" class="text-xs text-slate-500">0টি</p></div><button id="refresh" type="button" class="rounded-xl border px-3 py-2"><i class="fa-solid fa-rotate"></i></button></div><div id="list" class="mt-4 grid gap-3 sm:grid-cols-2"></div></div>
 </section></main></div>
 <script>
-const PIN_HASH="e10adc3949ba59abbe56e057f20f883e";let data={products:[],coupons:[]},editingId=null,selectedFiles=[];const $=id=>document.getElementById(id);
+const PIN_HASH="8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";let data={products:[],coupons:[]},editingId=null,selectedFiles=[];const $=id=>document.getElementById(id);
 async function sha256(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 $("loginForm").onsubmit=async e=>{e.preventDefault();if(await sha256($("pin").value.trim())===PIN_HASH){sessionStorage.setItem("shopAdmin","1");showApp()}else{$("loginError").textContent="PIN সঠিক নয়।";$ ("loginError").classList.remove("hidden")}};
 function showApp(){if(sessionStorage.getItem("shopAdmin")!=="1")return;$ ("login").classList.add("hidden");$("app").classList.remove("hidden")};showApp();$("logout").onclick=()=>{sessionStorage.removeItem("shopAdmin");location.reload()};
