@@ -1,0 +1,26 @@
+{
+  "shopName": "আল-আকসা বার্মিজ শপ",
+  "tagline": "ভালো পণ্য, সহজ অর্ডার",
+  "announcement": "🚚 অর্ডার করতে পণ্য কার্টে যোগ করুন এবং WhatsApp/Messenger-এ invoice পাঠান",
+  "whatsapp": "8801861007427",
+  "messenger": "https://m.me/61593972884460",
+  "phone": "01861007427",
+  "logo": "",
+  "heroTitle": "আপনার পছন্দের পণ্য এক জায়গায়",
+  "heroText": "ছবি, বিস্তারিত ও specifications দেখে পছন্দ করুন—তারপর cart থেকে সহজেই order invoice পাঠান।",
+  "heroButton": "পণ্য দেখুন",
+  "heroImage": "",
+  "insideDelivery": 80,
+  "outsideDelivery": 130,
+  "freeDeliveryMin": 0,
+  "currency": "৳",
+  "facebook": "",
+  "instagram": "",
+  "tiktok": "",
+  "faq": [
+    {"q":"কীভাবে অর্ডার করব?","a":"পণ্য দেখুন → Cart-এ যোগ করুন → আপনার নাম, ফোন ও ঠিকানা দিন → WhatsApp বা Messenger-এ invoice পাঠান।"},
+    {"q":"ডেলিভারি চার্জ কত?","a":"Checkout-এ প্রযোজ্য delivery charge দেখা যাবে।"},
+    {"q":"পণ্য সম্পর্কে বিস্তারিত কোথায় পাব?","a":"প্রতিটি product-এর description ও specifications খুলে দেখুন।"}
+  ],
+  "trustItems": ["পণ্যের বিস্তারিত তথ্য", "সহজ WhatsApp order", "Mobile-friendly shopping", "Invoice সহ order request"]
+}
