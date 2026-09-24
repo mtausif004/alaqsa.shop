@@ -5,7 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>body{font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}.drop{border:2px dashed #cbd5e1}.drop.drag{border-color:#0f172a;background:#f8fafc}</style>
 </head><body class="min-h-screen bg-slate-100 text-slate-900">
-<div id="login" class="flex min-h-screen items-center justify-center p-4"><form id="loginForm" class="w-full max-w-sm rounded-[2rem] bg-white p-7 shadow-xl"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-white"><i class="fa-solid fa-store"></i></div><h1 class="mt-4 text-center text-2xl font-black">Shop Admin</h1><p class="mb-5 text-center text-sm text-slate-500">PIN দিয়ে প্রবেশ করুন</p><input id="pin" type="password" inputmode="numeric" maxlength="12" class="w-full rounded-xl border px-4 py-3" placeholder="Admin PIN" required><button class="mt-3 w-full rounded-xl bg-slate-900 px-4 py-3 font-bold text-white">প্রবেশ করুন</button><p id="loginError" class="mt-3 hidden rounded-xl bg-red-50 p-3 text-sm text-red-700"></p><p class="mt-5 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-800">Demo PIN: <b>123456</b>। এটি client-side PIN, server-side security নয়।</p></form></div>
+<div id="login" class="flex min-h-screen items-center justify-center p-4"><form id="loginForm" class="w-full max-w-sm rounded-[2rem] bg-white p-7 shadow-xl"><div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-white"><i class="fa-solid fa-store"></i></div><h1 class="mt-4 text-center text-2xl font-black">Shop Admin</h1><p class="mb-5 text-center text-sm text-slate-500">PIN দিয়ে প্রবেশ করুন</p><input id="pin" type="password" autocomplete="off" maxlength="64" class="w-full rounded-xl border px-4 py-3" placeholder="Admin PIN" required><button class="mt-3 w-full rounded-xl bg-slate-900 px-4 py-3 font-bold text-white">প্রবেশ করুন</button><p id="loginError" class="mt-3 hidden rounded-xl bg-red-50 p-3 text-sm text-red-700"></p><p class="mt-5 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-800">Admin PIN supports letters, numbers and symbols। এটি client-side PIN, server-side security নয়।</p></form></div>
 <div id="app" class="hidden min-h-screen">
 <header class="sticky top-0 z-30 border-b bg-white/90 backdrop-blur-xl"><div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3"><div><b class="text-lg">আল-আকসা বার্মিজ শপ</b><p class="text-xs text-slate-500">Product Manager • Images • Coupons</p></div><button id="logout" class="rounded-xl border px-3 py-2 text-sm font-bold">Logout</button></div></header>
 <main class="mx-auto max-w-7xl space-y-5 px-4 py-5">
@@ -22,7 +22,7 @@
 <div class="rounded-[1.75rem] bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-widest text-slate-400">Catalog</p><h2 class="text-xl font-black">Product List</h2><p id="count" class="text-xs text-slate-500">0টি</p></div><button id="refresh" type="button" class="rounded-xl border px-3 py-2"><i class="fa-solid fa-rotate"></i></button></div><div id="list" class="mt-4 grid gap-3 sm:grid-cols-2"></div></div>
 </section></main></div>
 <script>
-const PIN_HASH="8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";let data={products:[],coupons:[]},editingId=null,selectedFiles=[];const $=id=>document.getElementById(id);
+const PIN_HASH="7b0cc6313b92fd0fe0c83a519b2785c9d16cf7ebcff92f3c8cb7258dd4a23e63";let data={products:[],coupons:[]},editingId=null,selectedFiles=[];const $=id=>document.getElementById(id);
 async function sha256(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 $("loginForm").onsubmit=async e=>{e.preventDefault();if(await sha256($("pin").value.trim())===PIN_HASH){sessionStorage.setItem("shopAdmin","1");showApp()}else{$("loginError").textContent="PIN সঠিক নয়।";$ ("loginError").classList.remove("hidden")}};
 function showApp(){if(sessionStorage.getItem("shopAdmin")!=="1")return;$ ("login").classList.add("hidden");$("app").classList.remove("hidden")};showApp();$("logout").onclick=()=>{sessionStorage.removeItem("shopAdmin");location.reload()};
@@ -30,7 +30,31 @@ function cfg(){return {owner:$("owner").value.trim(),repo:$("repo").value.trim()
 function auth(){const c=cfg();if(!c.owner||!c.repo||!c.token)throw new Error("GitHub Owner, Repo এবং Token দিন।");return c}
 async function api(path,opt={}){const c=auth();const r=await fetch(`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${path}`,{...opt,headers:{Accept:"application/vnd.github+json",Authorization:`Bearer ${c.token}`,...(opt.headers||{})}});const t=await r.text();let j={};try{j=JSON.parse(t)}catch{}if(!r.ok)throw new Error(j.message||`GitHub error ${r.status}`);return j}
 async function getProductsFile(){const c=auth();const j=await api(`products.json?ref=${encodeURIComponent(c.branch)}`);const raw=decodeURIComponent(escape(atob(j.content.replace(/\n/g,""))));return {sha:j.sha,data:JSON.parse(raw)}}
-async function putJson(fileData,message){const c=auth();const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));return api("products.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({message,content,branch:c.branch,sha:fileData.sha})})}
+async function putJson(fileData,message){
+  const c=auth();
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+  // Always fetch the latest products.json SHA before writing. Image uploads create
+  // their own GitHub commits, so the previously cached SHA can become stale.
+  let latest=await getProductsFile();
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const result=await api("products.json",{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message,content,branch:c.branch,sha:latest.sha})
+      });
+      window.__file={sha:result.content?.sha||latest.sha,data};
+      return result;
+    }catch(err){
+      // If another commit landed between GET and PUT, refresh the SHA and retry once.
+      if(attempt===0 && /does not match|sha/i.test(err.message)){
+        latest=await getProductsFile();
+        continue;
+      }
+      throw err;
+    }
+  }
+}
 function notice(msg,ok=true){$("status").textContent=msg;$("status").className=`rounded-xl px-4 py-3 text-sm ${ok?'bg-emerald-500/15 text-emerald-200':'bg-red-500/15 text-red-200'}`;$("status").classList.remove("hidden");clearTimeout(window.__n);window.__n=setTimeout(()=>$("status").classList.add("hidden"),5000)}
 async function load(){try{const x=await getProductsFile();data=x.data||{products:[],coupons:[]};data.products=data.products||[];data.coupons=data.coupons||[];window.__file=x;renderList();renderCoupons();notice("GitHub catalog loaded ✓")}catch(e){notice(e.message,false)}}
 $("load").onclick=load;$("refresh").onclick=load;
