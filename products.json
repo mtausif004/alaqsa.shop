@@ -1,4 +1,22 @@
 {
-  "products": [],
+  "products": [
+    {
+      "id": "Pp",
+      "name": "চালতা",
+      "category": "Pickle",
+      "brand": "Burmese",
+      "price": 65,
+      "comparePrice": 70,
+      "description": "টুট টুট",
+      "specs": [
+        "।।।।।।।"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790276183345-zbt8gl-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    }
+  ],
   "coupons": []
 }
