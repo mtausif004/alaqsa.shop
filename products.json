@@ -1,8 +1,4 @@
-[
-  {
-    "id": "P001",
-    "name": "আমের আচার",
-    "price": 65,
-    "image": "https://drive.google.com/file/d/1mnPJrEBEWEezKEpr39yuF1Lnp86-6VOU/view?usp=drivesdk"
-  }
-]
+{
+  "products": [],
+  "coupons": []
+}
