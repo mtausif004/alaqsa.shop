@@ -29,20 +29,68 @@
     "স্কিন কেয়ার ও কসমেটিকস (Skincare & Cosmetics)"
   ],
   "categoryTree": {
-    "আচার ও চাটনি (Pickles & Chutneys)": ["বার্মিজ আচার", "বয়ম আচার", "চাটনি"],
-    "মিষ্টি তেঁতুল / সুইট টামারিন (Sweet Tamarind)": ["প্যাকেট (Packet)", "বক্স (Box)"],
-    "বালাচাও (Balachao)": ["ট্র্যাডিশনাল ও স্পেশাল বালাচাও"],
-    "চকলেট ও কনফেকশনারি (Chocolates & Confectionery)": ["Marshmallow (মার্শমেলো)", "Jelly (জেলি)", "Soft Candy (সফট ক্যান্ডি)", "Hard Candy (হার্ড ক্যান্ডি)", "Nougat (নুগাট)", "Crispy (ক্রিস্পি)", "Lollipop (ললিপপ)", "Dark Chocolate (ডার্ক চকলেট)", "Oat (ওটস চকলেট)"],
-    "স্কিন কেয়ার ও কসমেটিকস (Skincare & Cosmetics)": ["সানস্ক্রিন (Sunscreen)", "সাবান (Soaps)", "লোশন ও ফেসওয়াশ"],
-    "চন্দন ও থানাকা (Thanaka & Sandalwood)": ["চন্দন কাঠ", "চন্দন গুঁড়া", "থানাকা", "শঙ্খ গুঁড়া", "থানাকা কেক/বার", "চন্দন লোশন", "চন্দন ফেসওয়াস"],
-    "বার্মিজ বাম (Burmese Balms)": ["বার্মিজ হারবাল বাম"],
-    "কফি ও হেলথ কেয়ার (Coffee & Health)": ["বার্মিজ কফি", "ক্যালসিয়াম সাপ্লিমেন্ট"],
-    "ড্রাই ফুডস ও বাদাম (Dry Foods & Nuts)": ["ড্রাই ফুডস (Dry Foods)", "বিভিন্ন প্রকার বাদাম (Nuts)"]
+    "আচার ও চাটনি (Pickles & Chutneys)": [
+      "বার্মিজ আচার",
+      "বয়ম আচার",
+      "চাটনি"
+    ],
+    "মিষ্টি তেঁতুল / সুইট টামারিন (Sweet Tamarind)": [
+      "প্যাকেট (Packet)",
+      "বক্স (Box)"
+    ],
+    "বালাচাও (Balachao)": [
+      "ট্র্যাডিশনাল ও স্পেশাল বালাচাও"
+    ],
+    "চকলেট ও কনফেকশনারি (Chocolates & Confectionery)": [
+      "Marshmallow (মার্শমেলো)",
+      "Jelly (জেলি)",
+      "Soft Candy (সফট ক্যান্ডি)",
+      "Hard Candy (হার্ড ক্যান্ডি)",
+      "Nougat (নুগাট)",
+      "Crispy (ক্রিস্পি)",
+      "Lollipop (ললিপপ)",
+      "Dark Chocolate (ডার্ক চকলেট)",
+      "Oat (ওটস চকলেট)"
+    ],
+    "স্কিন কেয়ার ও কসমেটিকস (Skincare & Cosmetics)": [
+      "সানস্ক্রিন (Sunscreen)",
+      "সাবান (Soaps)",
+      "লোশন ও ফেসওয়াশ"
+    ],
+    "চন্দন ও থানাকা (Thanaka & Sandalwood)": [
+      "চন্দন কাঠ",
+      "চন্দন গুঁড়া",
+      "থানাকা",
+      "শঙ্খ গুঁড়া",
+      "থানাকা কেক/বার",
+      "চন্দন লোশন",
+      "চন্দন ফেসওয়াস"
+    ],
+    "বার্মিজ বাম (Burmese Balms)": [
+      "বার্মিজ হারবাল বাম"
+    ],
+    "কফি ও হেলথ কেয়ার (Coffee & Health)": [
+      "বার্মিজ কফি",
+      "ক্যালসিয়াম সাপ্লিমেন্ট"
+    ],
+    "ড্রাই ফুডস ও বাদাম (Dry Foods & Nuts)": [
+      "ড্রাই ফুডস (Dry Foods)",
+      "বিভিন্ন প্রকার বাদাম (Nuts)"
+    ]
   },
   "faq": [
-    {"q": "কীভাবে অর্ডার করব?", "a": "পণ্য দেখুন → পছন্দের পণ্য Cart-এ যোগ করুন → নাম, ফোন ও ঠিকানা দিন → WhatsApp বা Messenger-এ invoice পাঠান।"},
-    {"q": "ডেলিভারি চার্জ কত?", "a": "Checkout-এ Inside Cox's Bazar বা Outside Cox's Bazar নির্বাচন করলে প্রযোজ্য delivery charge দেখা যাবে।"},
-    {"q": "পণ্য সম্পর্কে বিস্তারিত কোথায় পাব?", "a": "প্রতিটি product খুলে description, specifications, ছবি এবং থাকলে Facebook post/video link দেখতে পারবেন।"}
+    {
+      "q": "কীভাবে অর্ডার করব?",
+      "a": "পণ্য দেখুন → পছন্দের পণ্য Cart-এ যোগ করুন → নাম, ফোন ও ঠিকানা দিন → WhatsApp বা Messenger-এ invoice পাঠান।"
+    },
+    {
+      "q": "ডেলিভারি চার্জ কত?",
+      "a": "Checkout-এ Inside Cox's Bazar বা Outside Cox's Bazar নির্বাচন করলে প্রযোজ্য delivery charge দেখা যাবে।"
+    },
+    {
+      "q": "পণ্য সম্পর্কে বিস্তারিত কোথায় পাব?",
+      "a": "প্রতিটি product খুলে description, specifications, ছবি এবং থাকলে Facebook post/video link দেখতে পারবেন।"
+    }
   ],
   "trustItems": []
 }
