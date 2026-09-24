@@ -1,45 +1,4 @@
 {
-  "products": [
-    {
-      "id": "P_003",
-      "name": "আম",
-      "category": "Pickle",
-      "brand": "Burmese",
-      "price": 70,
-      "comparePrice": 72,
-      "description": "Mk",
-      "specs": [
-        "Jjdhd",
-        "Dnd",
-        "Djd",
-        "Jdk",
-        "Dj",
-        "Kl",
-        "Kl"
-      ],
-      "images": [
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790279848617-mr1k0f-0.webp"
-      ],
-      "active": true,
-      "featured": false
-    },
-    {
-      "id": "Pp",
-      "name": "চালতা",
-      "category": "Pickle",
-      "brand": "Burmese",
-      "price": 65,
-      "comparePrice": 70,
-      "description": "টুট টুট",
-      "specs": [
-        "।।।।।।।"
-      ],
-      "images": [
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790276183345-zbt8gl-0.webp"
-      ],
-      "active": true,
-      "featured": false
-    }
-  ],
+  "products": [],
   "coupons": []
 }
