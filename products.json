@@ -1,6 +1,21 @@
 {
   "products": [
     {
+      "id": "P003",
+      "name": "চালতা",
+      "price": 66,
+      "comparePrice": 6,
+      "description": "্ক",
+      "specs": [
+        "মতত"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790244626827-494ttg-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Ppl",
       "name": "Kk",
       "price": 0,
