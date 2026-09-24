@@ -1,4 +1,12 @@
 {
   "products": [],
-  "coupons": []
+  "coupons": [
+    {
+      "code": "KIRE",
+      "type": "percent",
+      "value": 66,
+      "minOrder": 0,
+      "active": true
+    }
+  ]
 }
