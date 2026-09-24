@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="আল-আকসা বার্মিজ শপ">
+<title>আল-আকসা বার্মিজ শপ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>body{font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+<header class="sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <div><h1 class="text-lg font-black">আল-আকসা বার্মিজ শপ</h1><p class="text-xs text-slate-500">অনলাইনে অর্ডার করুন</p></div>
+    <button id="cartButton" class="relative rounded-full bg-slate-900 px-4 py-2 font-bold text-white">
+      <i class="fa-solid fa-cart-shopping"></i> কার্ট
+      <span id="cartCount" class="absolute -right-2 -top-2 hidden min-w-5 rounded-full bg-red-600 px-1.5 py-0.5 text-xs">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-4 py-5">
+  <section class="mb-5 rounded-2xl bg-slate-900 p-5 text-white">
+    <h2 class="text-2xl font-black">পছন্দের পণ্য অর্ডার করুন</h2>
+    <p class="mt-1 text-sm text-slate-300">পণ্য বাছাই করুন এবং WhatsApp-এ অর্ডার পাঠান।</p>
+  </section>
+  <div id="status" class="mb-4 rounded-xl border bg-white p-4 text-sm text-slate-600">পণ্য লোড হচ্ছে...</div>
+  <section id="productGrid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"></section>
+</main>
+
+<div id="cartBackdrop" class="fixed inset-0 z-40 hidden bg-black/50"></div>
+<aside id="cartPanel" class="fixed right-0 top-0 z-50 flex h-full w-full max-w-md translate-x-full flex-col bg-white shadow-2xl transition-transform">
+  <div class="flex items-center justify-between border-b p-4">
+    <div><h2 class="font-bold">আপনার কার্ট</h2><p id="cartSummary" class="text-xs text-slate-500">0টি পণ্য</p></div>
+    <button id="closeCart" class="p-2" type="button"><i class="fa-solid fa-xmark text-xl"></i></button>
+  </div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-4"></div>
+  <div class="border-t bg-slate-50 p-4">
+    <div class="mb-4 flex justify-between text-lg font-black"><span>সর্বমোট</span><span id="cartTotal">৳0</span></div>
+    <form id="checkoutForm" class="space-y-3">
+      <input id="customerName" required maxlength="80" class="w-full rounded-xl border px-4 py-3" placeholder="আপনার নাম">
+      <input id="customerPhone" required maxlength="20" inputmode="tel" class="w-full rounded-xl border px-4 py-3" placeholder="মোবাইল নম্বর">
+      <textarea id="customerAddress" required maxlength="300" rows="3" class="w-full rounded-xl border px-4 py-3" placeholder="সম্পূর্ণ ডেলিভারি ঠিকানা"></textarea>
+      <button class="w-full rounded-xl bg-green-600 px-4 py-3 font-bold text-white" type="submit"><i class="fa-brands fa-whatsapp"></i> WhatsApp-এ অর্ডার</button>
+      <button id="messengerButton" class="w-full rounded-xl border border-blue-600 px-4 py-3 font-bold text-blue-700" type="button"><i class="fa-brands fa-facebook-messenger"></i> Messenger</button>
+    </form>
+  </div>
+</aside>
+
+<script>
+const WHATSAPP="8801861007427";
+const MESSENGER="https://m.me/61593972884460";
+let products=[], cart=new Map();
+const money=n=>"৳"+Number(n||0).toLocaleString("en-BD");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const entries=()=>[...cart.entries()].map(([id,q])=>({p:products.find(x=>x.id===id),q})).filter(x=>x.p&&x.q>0);
+const total=()=>entries().reduce((s,x)=>s+Number(x.p.price)*x.q,0);
+const count=()=>entries().reduce((s,x)=>s+x.q,0);
+
+function add(id){cart.set(id,(cart.get(id)||0)+1);render();openCart()}
+function qty(id,d){let n=(cart.get(id)||0)+d;n>0?cart.set(id,n):cart.delete(id);render()}
+function renderProducts(){
+  const g=document.getElementById("productGrid");
+  g.innerHTML=products.length?products.map(p=>{
+    const q=cart.get(p.id)||0;
+    return `<article class="overflow-hidden rounded-2xl border bg-white shadow-sm">
+      <div class="aspect-square bg-slate-100"><img loading="lazy" class="h-full w-full object-cover" src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.src='https://placehold.co/600x600?text=No+Image'"></div>
+      <div class="p-3"><h3 class="min-h-10 text-sm font-bold">${esc(p.name)}</h3><p class="mt-1 text-lg font-black">${money(p.price)}</p>
+      ${q?`<div class="mt-3 flex items-center justify-between rounded-xl bg-slate-100 p-1">
+        <button class="h-9 w-9 rounded-lg bg-white" onclick="qty('${esc(p.id)}',-1)">−</button><b>${q}</b>
+        <button class="h-9 w-9 rounded-lg bg-slate-900 text-white" onclick="qty('${esc(p.id)}',1)">+</button>
+      </div>`:`<button class="mt-3 w-full rounded-xl bg-slate-900 px-3 py-2.5 text-sm font-bold text-white" onclick="add('${esc(p.id)}')"><i class="fa-solid fa-cart-plus"></i> কার্টে যোগ করুন</button>`}
+      </div></article>`;
+  }).join(""):'<div class="col-span-full rounded-2xl bg-white p-8 text-center text-slate-500">কোনো পণ্য নেই।</div>';
+}
+function renderCart(){
+  const es=entries(), c=count();
+  document.getElementById("cartCount").textContent=c;
+  document.getElementById("cartCount").classList.toggle("hidden",!c);
+  document.getElementById("cartSummary").textContent=c+"টি পণ্য";
+  document.getElementById("cartTotal").textContent=money(total());
+  document.getElementById("cartItems").innerHTML=es.length?es.map(x=>`
+    <div class="mb-3 rounded-xl border p-3"><div class="flex gap-3">
+      <img src="${esc(x.p.image)}" class="h-16 w-16 rounded-lg object-cover" alt="">
+      <div class="min-w-0 flex-1"><b class="block truncate">${esc(x.p.name)}</b><span class="text-sm text-slate-500">${money(x.p.price)} × ${x.q}</span>
+      <div class="mt-2 flex items-center gap-2"><button class="h-8 w-8 rounded bg-slate-100" onclick="qty('${esc(x.p.id)}',-1)">−</button><b>${x.q}</b><button class="h-8 w-8 rounded bg-slate-900 text-white" onclick="qty('${esc(x.p.id)}',1)">+</button></div></div>
+      <b>${money(Number(x.p.price)*x.q)}</b>
+    </div></div>`).join(""):'<div class="py-12 text-center text-slate-500">কার্ট খালি</div>';
+}
+function render(){renderProducts();renderCart()}
+function openCart(){document.getElementById("cartBackdrop").classList.remove("hidden");document.getElementById("cartPanel").classList.remove("translate-x-full")}
+function closeCart(){document.getElementById("cartBackdrop").classList.add("hidden");document.getElementById("cartPanel").classList.add("translate-x-full")}
+function invoice(){
+  const lines=["🛒 *আল-আকসা বার্মিজ শপ — অর্ডার*","",`👤 নাম: ${document.getElementById("customerName").value.trim()}`,`📱 ফোন: ${document.getElementById("customerPhone").value.trim()}`,`📍 ঠিকানা: ${document.getElementById("customerAddress").value.trim()}`,"","📦 *পণ্য:*"];
+  entries().forEach(x=>lines.push(`• ${x.p.name} × ${x.q} = ${money(Number(x.p.price)*x.q)}`));
+  lines.push("",`💰 *সর্বমোট: ${money(total())}*`);return lines.join("\n");
+}
+document.getElementById("cartButton").onclick=openCart;
+document.getElementById("closeCart").onclick=closeCart;
+document.getElementById("cartBackdrop").onclick=closeCart;
+document.getElementById("checkoutForm").onsubmit=e=>{e.preventDefault();if(!count())return alert("কার্ট খালি।");window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(invoice()),"_blank","noopener,noreferrer")};
+document.getElementById("messengerButton").onclick=()=>{if(!count())return alert("কার্ট খালি।");window.open(MESSENGER,"_blank","noopener,noreferrer")};
+
+async function load(){
+ try{
+  const r=await fetch("./products.json?v="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const data=await r.json();if(!Array.isArray(data))throw new Error("Invalid products.json");
+  products=data.filter(p=>p&&p.id&&p.name&&Number.isFinite(Number(p.price))&&p.image);
+  document.getElementById("status").className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700";
+  document.getElementById("status").textContent=products.length+"টি পণ্য পাওয়া গেছে।";render();
+ }catch(e){console.error(e);document.getElementById("status").className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700";document.getElementById("status").textContent="products.json লোড করা যায়নি।"}
+}
+load();
+</script>
+</body>
+</html>
