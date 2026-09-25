@@ -1,6 +1,27 @@
 {
   "products": [
     {
+      "id": "Burmese_01",
+      "name": "Burmese Dry Mango Pickle",
+      "category": "আচার ও চাটনি (Pickles & Chutneys)",
+      "subcategory": "বার্মিজ আচার",
+      "brand": "Mango (Product of Myanmar)",
+      "facebookPost": "https://www.facebook.com/share/p/1LMuJx4Nxy/",
+      "price": 65,
+      "comparePrice": 72,
+      "description": "এটি মিয়ানমারের একটি অত্যন্ত সুস্বাদু ও মুখরোচক আম আচার, যা টক-ঝাল স্বাদে ভরপুর। খাঁটি আম, চিনি, লবণ ও বিশেষ মসলার মিশ্রণে তৈরি। এই আচারটি দারুণ জনপ্রিয়।",
+      "specs": [
+        "প্রধান উপাদান: আম , চিনি , লবণ , কারি পাউডার এবং মরিচ",
+        "​নিট ওজন: ১৮ গ্রাম",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790369859605-0mb7rb-0.webp"
+      ],
+      "active": true,
+      "featured": true
+    },
+    {
       "id": "Thanaka_002",
       "name": "ShwePyiNann Natural Beauty Thanakha Cake",
       "category": "চন্দন ও থানাকা (Thanaka & Sandalwood)",
