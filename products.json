@@ -23,30 +23,6 @@
       ],
       "active": true,
       "featured": false
-    },
-    {
-      "id": "Pic_01",
-      "name": "চালতা",
-      "category": "আচার ও চাটনি (Pickles & Chutneys)",
-      "subcategory": "বার্মিজ আচার",
-      "brand": "Burmese",
-      "facebookPost": "https://www.facebook.com/share/r/18Rgges6SZ/",
-      "price": 65,
-      "comparePrice": 73,
-      "description": "..\n.\n.dd\nDd",
-      "specs": [
-        "Cjf",
-        "Djd",
-        "Djd",
-        "Xjxk"
-      ],
-      "images": [
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790282894591-2chswz-0.webp",
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790282894508-m3ya2x-1.webp",
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790282894602-9tbwr3-2.webp"
-      ],
-      "active": true,
-      "featured": false
     }
   ],
   "coupons": []
