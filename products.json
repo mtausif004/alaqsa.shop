@@ -1,6 +1,30 @@
 {
   "products": [
     {
+      "id": "Thanaka_01",
+      "name": "Shwebo Minthamee Thanaka Cake (বার্মিজ থানাকা কেক)",
+      "category": "চন্দন ও থানাকা (Thanaka & Sandalwood)",
+      "subcategory": "থানাকা কেক/বার",
+      "brand": "Shwebo Minthamee",
+      "facebookPost": "https://www.facebook.com/share/r/1ByEBAYMRe/",
+      "price": 120,
+      "comparePrice": 150,
+      "description": "এটি মিয়ানমারের ঐতিহ্যবাহী ও খাঁটি প্রাকৃতিক থানাকা, যা ত্বকের যত্নে অত্যন্ত জনপ্রিয়। এটি রোদে পোড়া ভাব দূর করতে, ত্বকের তৈলাক্ত ভাব কমাতে এবং প্রাকৃতিকভাবে ত্বক উজ্জ্বল ও ঠান্ডা রাখতে সাহায্য করে। এটি ক্ষতিকর কেমিক্যালমুক্ত এবং সব ধরনের ত্বকের জন্য উপযোগী।",
+      "specs": [
+        "​পণ্যের ধরণ: প্রাকৃতিক থানাকা বার",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)",
+        "​পরিমাণ: ১ পিছ",
+        "​উপকারিতা: ত্বক উজ্জ্বল করে, ব্রণের দাগ ও অতিরিক্ত তেল দূর করে এবং ত্বক ঠান্ডা রাখে।"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790327019421-f32huf-0.webp",
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790327019282-6j6ppo-1.webp",
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790327019277-nmfu8e-2.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Pic_01",
       "name": "চালতা",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
