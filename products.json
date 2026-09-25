@@ -1,6 +1,29 @@
 {
   "products": [
     {
+      "id": "Thanaka_002",
+      "name": "ShwePyiNann Natural Beauty Thanakha Cake",
+      "category": "চন্দন ও থানাকা (Thanaka & Sandalwood)",
+      "subcategory": "থানাকা",
+      "brand": "ShwePyiNann",
+      "facebookPost": "https://www.facebook.com/share/p/1Jb9rysZsi/",
+      "price": 400,
+      "comparePrice": 495,
+      "description": "এটি একটি এক্সপোর্ট কোয়ালিটির প্রাকৃতিক থানাকা কেক, যা ত্বকের বিভিন্ন সমস্যা দূর করতে অত্যন্ত কার্যকর। এটি প্রাকৃতিকভাবে ব্রণের দাগ, র‌্যাশ, কালো দাগ ও ত্বকের প্রদাহ বা এলার্জি দূর করে ত্বককে সুস্থ ও উজ্জ্বল রাখে।",
+      "specs": [
+        "পণ্যের ধরণ: প্রাকৃতিক থানাকা কেক (Natural Beauty Thanakha Cake)",
+        "​কোয়ালিটি: এক্সপোর্ট কোয়ালিটি (Export Quality)",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)",
+        "​প্রধান কাজ: ব্রণ, র‌্যাশ, কালো দাগ ও ত্বকের এলার্জি দূর করে ত্বক সতেজ ও সুন্দর রাখে।"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790327682728-em6d9a-0.webp",
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790327682900-9p5v8a-1.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Thanaka_01",
       "name": "Shwebo Minthamee Thanaka Cake (বার্মিজ থানাকা কেক)",
       "category": "চন্দন ও থানাকা (Thanaka & Sandalwood)",
