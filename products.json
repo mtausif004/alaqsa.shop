@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "Burmese_04",
+      "name": "Burmese Dry Sweet Masala Apple Plum Pickle",
+      "category": "",
+      "subcategory": "",
+      "brand": "HmweHmweLay",
+      "facebookPost": "https://www.facebook.com/share/p/1VP8zDzgFC/",
+      "price": 95,
+      "comparePrice": 100,
+      "description": "এটি মিয়ানমারের একটি অত্যন্ত সুস্বাদু ও মুখরোচক ড্রাই বরই আচার, যা মিষ্টি স্বাদে ভরপুর। খাঁটি ড্রাই বরই ও বিশেষ মসলার মিশ্রণে তৈরি। এই আচারটি \"ড্রাই মিষ্টি মসলা বরই\" নামে বহুল পরিচিত।",
+      "specs": [
+        "প্রধান উপাদান: ড্রাই বরই ও মিষ্টি মসলা",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790401314934-ji6cgm-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Burmese_03",
       "name": "Burmese Hot and Spicy Plum Pickle",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
