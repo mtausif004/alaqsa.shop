@@ -39,7 +39,10 @@
         "​প্রস্তুত প্রণালী: সি ফ্রেশ হোম মেড (Sea Fresh Home Made)",
         "ওজন: ৩০০ গ্রাম (বড়)"
       ],
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790406509863-rhdjyj-0.webp",
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790406510031-mjisos-1.webp"
+      ],
       "active": true,
       "featured": true
     },
