@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "Burmese_07",
+      "name": "Burmese Dry Elephant apple Pickle",
+      "category": "আচার ও চাটনি (Pickles & Chutneys)",
+      "subcategory": "বার্মিজ আচার",
+      "brand": "Htoo Kare",
+      "facebookPost": "https://www.facebook.com/share/p/1VP8zDzgFC/",
+      "price": 95,
+      "comparePrice": 100,
+      "description": "এটি মিয়ানমারের একটি অত্যন্ত সুস্বাদু ও মুখরোচক চালতা আচার, যা ঝাল-মিষ্টি  স্বাদে ভরপুর। খাঁটি ড্রাই চালতা, চিনি, লবণ ও বিশেষ মসলার মিশ্রণে তৈরি। এই আচারটি দারুণ জনপ্রিয়।",
+      "specs": [
+        "প্রধান উপাদান: চালতা , চিনি , লবণ , কারি পাউডার এবং মরিচ",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790404821066-088xtx-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Burmese_06",
       "name": "Burmese Sweet Plum Pickle",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
