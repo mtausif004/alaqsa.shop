@@ -1,6 +1,29 @@
 {
   "products": [
     {
+      "id": "Balachaw",
+      "name": "Farhad Shrimp Balachaw - ফরহাদ চিংড়ি বালাচাও",
+      "category": "বালাচাও (Balachao)",
+      "subcategory": "ট্র্যাডিশনাল ও স্পেশাল বালাচাও",
+      "brand": "Farhad (Sea Fresh Home Made)",
+      "facebookPost": "https://www.facebook.com/share/p/1CJf8miQhN/",
+      "price": 250,
+      "comparePrice": 400,
+      "description": "সম্পূর্ন ঘরোয়া উপায়ে তৈরি সুস্বাদু ও মুখরোচক শ্রিম্প বালাচাও, যা গরম ভাত বা বিভিন্ন স্ন্যাকসের সাথে খাওয়ার জন্য অত্যন্ত জনপ্রিয়। এটি হালাল সার্টিফাইড এবং খাঁটি উপাদান দিয়ে তৈরি।",
+      "specs": [
+        "প্রধান উপাদান: ফ্রেশ শুকনা চিংড়ি, মরিচ, রসুন, আদা, পেঁয়াজ, লবণ, সরিষার তেল এবং অন্যান্য মসলা",
+        "​সার্টিফিকেশন: হালাল (Halal)",
+        "​প্রস্তুত প্রণালী: সি ফ্রেশ হোম মেড (Sea Fresh Home Made)",
+        "ওজন: ৩০০ গ্রাম (বড়)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790405496345-hq91qs-0.webp",
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790405496502-lxtuay-1.webp"
+      ],
+      "active": true,
+      "featured": true
+    },
+    {
       "id": "Burmese_07",
       "name": "Burmese Dry Elephant apple Pickle",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
