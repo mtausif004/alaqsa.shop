@@ -24,7 +24,7 @@
       "featured": false
     },
     {
-      "id": "Balachaw",
+      "id": "Balachaw_01",
       "name": "Farhad Shrimp Balachaw - ফরহাদ চিংড়ি বালাচাও",
       "category": "বালাচাও (Balachao)",
       "subcategory": "ট্র্যাডিশনাল ও স্পেশাল বালাচাও",
@@ -39,10 +39,7 @@
         "​প্রস্তুত প্রণালী: সি ফ্রেশ হোম মেড (Sea Fresh Home Made)",
         "ওজন: ৩০০ গ্রাম (বড়)"
       ],
-      "images": [
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790405496345-hq91qs-0.webp",
-        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790405496502-lxtuay-1.webp"
-      ],
+      "images": [],
       "active": true,
       "featured": true
     },
