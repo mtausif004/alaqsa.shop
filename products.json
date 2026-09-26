@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "Burmese_05",
+      "name": "Burmese Sour Tamarind Pickle",
+      "category": "আচার ও চাটনি (Pickles & Chutneys)",
+      "subcategory": "বার্মিজ আচার",
+      "brand": "Natural Tamarind",
+      "facebookPost": "https://www.facebook.com/share/p/1VP8zDzgFC/",
+      "price": 95,
+      "comparePrice": 100,
+      "description": "এটি মিয়ানমারের একটি অত্যন্ত সুস্বাদু ও মুখরোচক তেতুল আচার, যা টক স্বাদে ভরপুর। ড্রাই টক তেতুল ও বিশেষ লবন-মসলার মিশ্রণে তৈরি। এই আচারটি \"ড্রাই টক তেতুল\" নামে বহুল পরিচিত।",
+      "specs": [
+        "প্রধান উপাদান: ড্রাই তেতুল ও লবন-মসলা",
+        "​উৎপত্তিস্থল:মিয়ানমার (Myanmar)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790402053573-c2c4vn-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Burmese_04",
       "name": "Burmese Dry Sweet Masala Apple Plum Pickle",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
