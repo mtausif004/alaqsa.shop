@@ -1,6 +1,26 @@
 {
   "products": [
     {
+      "id": "Burmese_06",
+      "name": "Burmese Sweet Plum Pickle",
+      "category": "আচার ও চাটনি (Pickles & Chutneys)",
+      "subcategory": "বার্মিজ আচার",
+      "brand": "Burmese Plum",
+      "facebookPost": "https://www.facebook.com/share/p/1VP8zDzgFC/",
+      "price": 95,
+      "comparePrice": 100,
+      "description": "এটি মিয়ানমারের একটি অত্যন্ত সুস্বাদু ও মুখরোচক রসালো মিষ্টি বরই আচার, যা মিষ্টি স্বাদে ভরপুর। খাঁটি মিষ্টি বরই ও বিশেষ রসালো মসলার মিশ্রণে তৈরি। এই আচারটি \"রসালো মিষ্টি বরই\" নামে বহুল পরিচিত।",
+      "specs": [
+        "প্রধান উপাদান: মিষ্টি বরই ও রসালো মসলা",
+        "​উৎপত্তিস্থল: মিয়ানমার (Myanmar)"
+      ],
+      "images": [
+        "https://raw.githubusercontent.com/mtausif004/alaqsa.shop/main/product-images/1790402761838-cyw53q-0.webp"
+      ],
+      "active": true,
+      "featured": false
+    },
+    {
       "id": "Burmese_05",
       "name": "Burmese Sour Tamarind Pickle",
       "category": "আচার ও চাটনি (Pickles & Chutneys)",
