@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loading product…</title></head><body><script>
+(function(){
+  var path=location.pathname;
+  var m=path.match(/\/product\/([^/?#]+)/);
+  if(m){
+    var parts=path.split('/').filter(Boolean);
+    var base=(location.hostname.endsWith('.github.io')&&parts.length>1)?'/'+parts[0]+'/':'/';
+    location.replace(base+'?product='+encodeURIComponent(decodeURIComponent(m[1])));
+  }else{location.replace('/');}
+})();
+</script></body></html>
