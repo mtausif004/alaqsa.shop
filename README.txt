@@ -39,3 +39,19 @@ NOTES
 - Unique admin path is not the security boundary; backend session authentication is.
 - GitHub token is held only in the browser session and is not written to settings.json.
 - Existing Product IDs are not regenerated during catalog load/edit.
+
+
+V22 CHANGES
+- Mobile admin navigation is a left slide drawer; desktop navigation remains a left sidebar.
+- Admin routes use hash URLs: #dashboard, #products, #orders, #settings, #security, #banners, #categories.
+- Banners and Categories are top-level modules, not Settings tabs.
+- Settings has Branding, Delivery, Contact, About, FAQ, Backend groups.
+- Apps Script URL defaults to the current deployed Web App URL and persists after Save.
+- Backend Test Connection and Telegram Test Notification are available under Settings > Backend.
+- Telegram API responses are verified and errors are written to Logs.
+- Dark mode uses charcoal/gray surfaces rather than pure black.
+
+IMPORTANT AFTER UPLOAD
+1. Replace Code.gs in the Google Apps Script project with the V22 Code.gs contents and deploy a NEW version of the existing Web App deployment.
+2. Do not change or expose TELEGRAM_BOT_TOKEN in the website. Keep it in Script Properties.
+3. In Admin > Settings > Backend, press Test Connection and Test Telegram.
