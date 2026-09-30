@@ -1,0 +1,11 @@
+[
+ {"Category ID":"CAT01","Name":"আচার ও চাটনি","Subcategories":"বার্মিজ আচার|বয়ম আচার|চাটনি","Active":"TRUE","Top Pin":"FALSE","Sort Order":1},
+ {"Category ID":"CAT02","Name":"মিষ্টি তেঁতুল","Subcategories":"প্যাকেট|বক্স","Active":"TRUE","Top Pin":"FALSE","Sort Order":2},
+ {"Category ID":"CAT03","Name":"বালাচাও","Subcategories":"ট্র্যাডিশনাল ও স্পেশাল বালাচাও","Active":"TRUE","Top Pin":"FALSE","Sort Order":3},
+ {"Category ID":"CAT04","Name":"চকলেট ও কনফেকশনারি","Subcategories":"Marshmallow|Jelly|Soft Candy|Hard Candy|Nougat|Crispy|Lollipop|Dark Chocolate|Oat","Active":"TRUE","Top Pin":"FALSE","Sort Order":4},
+ {"Category ID":"CAT05","Name":"স্কিন কেয়ার ও কসমেটিকস","Subcategories":"Sunscreen|Soaps|Lotion & Facewash","Active":"TRUE","Top Pin":"FALSE","Sort Order":5},
+ {"Category ID":"CAT06","Name":"চন্দন ও থানাকা","Subcategories":"চন্দন কাঠ|চন্দন গুঁড়া|থানাকা|শঙ্খ গুঁড়া|থানাকা কেক/বার|চন্দন লোশন|চন্দন ফেসওয়াস","Active":"TRUE","Top Pin":"FALSE","Sort Order":6},
+ {"Category ID":"CAT07","Name":"বার্মিজ বাম","Subcategories":"বার্মিজ হারবাল বাম","Active":"TRUE","Top Pin":"FALSE","Sort Order":7},
+ {"Category ID":"CAT08","Name":"কফি ও হেলথ কেয়ার","Subcategories":"বার্মিজ কফি|ক্যালসিয়াম সাপ্লিমেন্ট","Active":"TRUE","Top Pin":"FALSE","Sort Order":8},
+ {"Category ID":"CAT09","Name":"ড্রাই ফুডস ও বাদাম","Subcategories":"ড্রাই ফুডস|বিভিন্ন প্রকার বাদাম","Active":"TRUE","Top Pin":"FALSE","Sort Order":9}
+]
