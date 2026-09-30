@@ -108,5 +108,42 @@
       "a": "প্রতিটি product খুলে description, specifications, ছবি এবং থাকলে Facebook post/video link দেখতে পারবেন।"
     }
   ],
-  "trustItems": []
+  "trustItems": [],
+  "orderApiUrl": "https://script.google.com/macros/s/AKfycbzTu536zNamjE99oit02MBE3yBhDyev18WCzHVgYliZIRFq7u1tx_LShdfceQ0T_w/exec",
+  "spreadsheetId": "1uad5vYrv7UlXZQGVFIt0PbilD4tblBfxL-5C9Qy1mA8",
+  "brandColors": {
+    "primary": "#6B352A",
+    "accent": "#FFF1A6",
+    "navy": "#2F4858",
+    "mint": "#DDFBEF"
+  },
+  "deliveryModes": {
+    "weight": {
+      "active": true,
+      "label": "পণ্যের ওজনের উপর",
+      "ratePerKg": 0,
+      "minWeightKg": 0,
+      "rounding": "ceil"
+    },
+    "inside": {
+      "active": true,
+      "label": "Inside Cox's Bazar",
+      "charge": 80
+    },
+    "outside": {
+      "active": true,
+      "label": "Outside Cox's Bazar",
+      "charge": 130
+    }
+  },
+  "offers": [],
+  "combos": [],
+  "seo": {
+    "homeTitle": "Al Aqsa Burmese Shop | Authentic Burmese Products",
+    "homeDescription": "Buy authentic Burmese products, Thanaka, pickles and snacks online. Enjoy Cox's Bazar delivery and easy Burmese market shopping.",
+    "cosmeticsTitle": "Burmese Cosmetics | Thanaka & Sandalwood Online",
+    "cosmeticsDescription": "Buy authentic Thanaka online, Burmese sandalwood and skincare products with convenient delivery from Al Aqsa Burmese Shop.",
+    "picklesTitle": "Burmese Pickles & Chutneys | Authentic Achar",
+    "picklesDescription": "Discover the best Burmese pickles, achar and chutneys online. Shop authentic flavors with Cox's Bazar delivery from Al Aqsa Burmese Shop."
+  }
 }

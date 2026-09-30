@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://mtausif004.github.io/alaqsa.shop/sitemap.xml
+
+Sitemap: /sitemap.xml
