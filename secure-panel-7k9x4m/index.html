@@ -120,9 +120,9 @@ async function allocateNewProductId(category){
   const url=String($('orderApiUrl')?.value||$('setOrderApiUrl')?.value||window.__settings?.orderApiUrl||'').trim();
   const sessionToken=sessionStorage.getItem('aqAdminSession')||'';
   if(!url||!sessionToken) throw new Error('Secure backend session is required for automatic Product ID.');
-  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'allocateProductId',category,sessionToken})});
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'allocateProductId',category,token:sessionToken})});
   const j=await r.json();
-  if(!j.ok) throw new Error(j.message||'Product ID allocation failed');
+  if(j.success!==true && j.ok!==true) throw new Error(j.message||j.error||'Product ID allocation failed');
   return j.productId;
 }
 
@@ -184,12 +184,12 @@ $('shopNameFont')?.addEventListener('change',e=>{$('fontPreview').style.fontFami
 $('setShopNameFont')?.addEventListener('change',e=>{const f=e.target.value; document.body.style.setProperty('--shop-font',f)});
 $('brandLogo')?.addEventListener('change',e=>{const f=e.target.files?.[0];if(f)$('brandLogoPreview').innerHTML=`<img src="${URL.createObjectURL(f)}" class="max-h-24 max-w-full object-contain">`});
 $('setLogoFile')?.addEventListener('change',e=>{const f=e.target.files?.[0];if(f)$('setLogoPreview').innerHTML=`<img src="${URL.createObjectURL(f)}" class="max-h-16 max-w-full object-contain">`});
-async function callOrderApi(action,payload={}){const url=String($('orderApiUrl')?.value||$('setOrderApiUrl')?.value||window.__settings?.orderApiUrl||'').trim();if(!url)throw Error('Apps Script Web App URL দিন।');const token=sessionStorage.getItem('aqAdminSession')||'';const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...payload,sessionToken:token})});const j=await r.json();if(!j.ok)throw Error(j.message||'API error');return j}
+async function callOrderApi(action,payload={}){const url=String($('orderApiUrl')?.value||$('setOrderApiUrl')?.value||window.__settings?.orderApiUrl||'').trim();if(!url)throw Error('Apps Script Web App URL দিন।');const token=sessionStorage.getItem('aqAdminSession')||'';const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...payload,token})});const j=await r.json();if(j.success!==true && j.ok!==true)throw Error(j.message||j.error||'API error');return j}
 async function renderOrders(){
   const q=($('orderSearch')?.value||'').toLowerCase().trim(),st=$('orderStatusFilter')?.value||'';
   try{
     const j=await callOrderApi('listOrders');
-    let rows=j.orders||[];
+    let rows=(j.orders||[]).map(o=>({orderId:o['Order ID']||o.orderId||'',customerName:o['Customer Name']||o.customerName||'',phone:o.Phone||o.phone||'',address:o.Address||o.address||'',zone:o['Delivery Zone']||o.zone||'',delivery:Number(o['Delivery Charge']??o.delivery??0),subtotal:Number(o.Subtotal??o.subtotal??0),grandTotal:Number(o.Total??o.grandTotal??0),status:o.Status||o.status||'New',note:o.Note||o.note||'',discount:Number(o.Discount??o.discount??0),items:o.items||[]}));
     window.__orders=rows;
     rows=rows.filter(o=>(!st||o.status===st)&&(!q||JSON.stringify(o).toLowerCase().includes(q)));
     $('orderCount').textContent=rows.length;
@@ -222,7 +222,7 @@ async function editOrder(orderId){
     try{
       const items=[...document.querySelectorAll('#editItems > div')].map(row=>{const id=row.querySelector('.editItemProduct').value;const qty=Number(row.querySelector('.editItemQty').value||1);const p=(data.products||[]).find(x=>x.id===id);return p?{productId:p.id,productName:p.name,qty:qty,unitPrice:Number(p.price||0),discount:0,lineTotal:Number(p.price||0)*qty}:null}).filter(Boolean);
       if(!items.length) throw Error('কমপক্ষে একটি product রাখুন।');
-      await callOrderApi('editOrder',{orderId:orderId,patch:{customerName:$('editCustomerName').value.trim(),phone:$('editPhone').value.trim(),address:$('editAddress').value.trim(),zone:$('editZone').value,note:$('editNote').value.trim(),discount:Number($('editDiscount').value||0),deliveryCharge:Number($('editDelivery').value||0),items:items}});
+      await callOrderApi('editOrder',{orderId:orderId,customerName:$('editCustomerName').value.trim(),phone:$('editPhone').value.trim(),address:$('editAddress').value.trim(),deliveryZone:$('editZone').value,note:$('editNote').value.trim(),discount:Number($('editDiscount').value||0),deliveryCharge:Number($('editDelivery').value||0),items:items});
       modal.remove(); notice('Order updated ✓'); await renderOrders();
     }catch(e){notice(e.message,false)}
   };
@@ -238,9 +238,9 @@ function printOrder(orderId,type){
 }
 $('loadOrders')?.addEventListener('click',renderOrders);$('refreshOrders')?.addEventListener('click',renderOrders);$('orderSearch')?.addEventListener('input',()=>renderOrders());$('orderStatusFilter')?.addEventListener('change',renderOrders);
 $('saveBranding')?.addEventListener('click',async()=>{try{if(!window.__settings)await loadSettings();let x=window.__settings||{};x.shopName=$('setShopName').value.trim();x.shopNameFont=$('setShopNameFont').value||x.shopNameFont||'Noto Serif Bengali';x.desktopLogoHeight=Number($('setDesktopLogoHeight').value||48);x.mobileLogoHeight=Number($('setMobileLogoHeight').value||40);const f=$('setLogoFile').files?.[0];if(f){const p=await prepareImageBlobs([f]);x.logo=p[0].url;await publishSettings(x,p,'Update branding')}else await putJsonFile('settings.json',x,'Update branding');window.__settings=x;renderAdminLogo(x.logo||'');notice('Branding saved ✓')}catch(e){notice(e.message,false)}});
-$('securityForm')?.addEventListener('submit',async e=>{e.preventDefault();try{const current=$('currentPass').value,newUser=$('newUserId').value.trim(),newPass=$('newPass').value,confirm=$('confirmPass').value;if(newPass&&newPass!==confirm)throw Error('New password ও confirm password মিলছে না');const j=await callOrderApi('changeCredentials',{currentPassword:current,newUserId:newUser,newPassword:newPass});if(j.ok){$('securityForm').reset();notice('Credentials updated ✓')}}catch(e){notice(e.message,false)}});
+$('securityForm')?.addEventListener('submit',async e=>{e.preventDefault();try{const current=$('currentPass').value,newUser=$('newUserId').value.trim(),newPass=$('newPass').value,confirm=$('confirmPass').value;if(newPass&&newPass!==confirm)throw Error('New password ও confirm password মিলছে না');const j=await callOrderApi('changeCredentials',{currentUser:sessionStorage.getItem('aqAdminUser')||'',currentPassword:current,newUser:newUser,newPassword:newPass});if(j.success===true || j.ok===true){$('securityForm').reset();notice('Credentials updated ✓')}}catch(e){notice(e.message,false)}});
 // Secure backend login. Falls back to setup notice when API URL is not configured.
-$('loginForm')?.addEventListener('submit',async e=>{e.preventDefault();const user=$('adminUser').value.trim(),pass=$('adminPass').value;const url=String(sessionStorage.getItem('aqOrderApiUrl')||localStorage.getItem('aqOrderApiUrl')||DEFAULT_ORDER_API_URL).trim();try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'login',userId:user,password:pass})});const j=await r.json();if(!j.ok)throw Error(j.message||'Login failed');sessionStorage.setItem('aqAdminSession',j.sessionToken);sessionStorage.setItem('shopAdmin','1');sessionStorage.setItem('aqOrderApiUrl',url);location.reload()}catch(err){$('loginError').textContent=err.message;$('loginError').classList.remove('hidden')}});
+$('loginForm')?.addEventListener('submit',async e=>{e.preventDefault();const user=$('adminUser').value.trim(),pass=$('adminPass').value;const url=String(sessionStorage.getItem('aqOrderApiUrl')||localStorage.getItem('aqOrderApiUrl')||DEFAULT_ORDER_API_URL).trim();try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'login',username:user,password:pass})});const j=await r.json();if(j.success!==true && j.ok!==true)throw Error(j.message||j.error||'Login failed');sessionStorage.setItem('aqAdminSession',j.token||j.sessionToken||'');sessionStorage.setItem('aqAdminUser',user);sessionStorage.setItem('shopAdmin','1');sessionStorage.setItem('aqOrderApiUrl',url);location.reload()}catch(err){$('loginError').textContent=err.message;$('loginError').classList.remove('hidden')}});
 
 
 
@@ -253,8 +253,8 @@ async function loadDashboard(){
       box=document.createElement('div'); box.id='dashboardMetrics'; box.className='mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4';
       first?.appendChild(box);
     }
-    const st=j.statuses||{};
-    box.innerHTML=[['Today Orders',j.todayOrders||0],['New',st.New||0],['Processing',st.Processing||0],['Delivered',st.Delivered||0],['Sales',`৳${Number(j.sales||0).toLocaleString('en-BD')}`],['Shipped',st.Shipped||0],['Confirmed',st.Confirmed||0],['Cancelled',st.Cancelled||0]].map(x=>`<div class="rounded-2xl bg-white/10 p-3"><div class="text-[11px] text-slate-300">${x[0]}</div><b class="mt-1 block text-xl">${x[1]}</b></div>`).join('');
+    const rawSt=j.statuses||j.stats||{}; const st={New:rawSt.New??rawSt.newOrders??0,Confirmed:rawSt.Confirmed??rawSt.confirmed??0,Processing:rawSt.Processing??rawSt.processing??0,Shipped:rawSt.Shipped??rawSt.shipped??0,Delivered:rawSt.Delivered??rawSt.delivered??0,Cancelled:rawSt.Cancelled??rawSt.cancelled??0};
+    box.innerHTML=[['Today Orders',j.todayOrders??j.stats?.todayOrders??0],['New',st.New||0],['Processing',st.Processing||0],['Delivered',st.Delivered||0],['Sales',`৳${Number(j.sales??j.stats?.todaySales??0).toLocaleString('en-BD')}`],['Shipped',st.Shipped||0],['Confirmed',st.Confirmed||0],['Cancelled',st.Cancelled||0]].map(x=>`<div class="rounded-2xl bg-white/10 p-3"><div class="text-[11px] text-slate-300">${x[0]}</div><b class="mt-1 block text-xl">${x[1]}</b></div>`).join('');
   }catch(e){/* dashboard is informational; login/product workflow remains usable */}
 }
 /* ===== V22 navigation, URL routing, drawer and theme ===== */
@@ -287,7 +287,7 @@ document.getElementById('setShopName')?.addEventListener('input',e=>document.get
 /* ===== V22 settings persistence + backend diagnostics ===== */
 function v22DefaultApiUrl(){return DEFAULT_ORDER_API_URL}
 async function v22TestBackend(){const url=String($('setOrderApiUrl')?.value||DEFAULT_ORDER_API_URL).trim()||DEFAULT_ORDER_API_URL;try{const r=await fetch(url,{cache:'no-store'});const j=await r.json();if(j.status==='online'){if($('backendStatus')){$('backendStatus').textContent='● Backend Online';$('backendStatus').className='rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700'}notice('Backend connection successful ✓')}else throw Error('Backend responded unexpectedly')}catch(e){if($('backendStatus')){$('backendStatus').textContent='● Connection Failed';$('backendStatus').className='rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700'}notice('Backend connection failed: '+e.message,false)}}
-async function v22TestTelegram(){try{auth();const j=await callOrderApi('testTelegram');if(!j.ok)throw Error(j.message||'Telegram test failed');$('telegramStatus').textContent='Telegram notification sent successfully ✓';$('telegramStatus').className='mt-3 text-xs font-semibold text-emerald-600';notice('Telegram test notification sent ✓')}catch(e){$('telegramStatus').textContent='Telegram test failed: '+e.message;$('telegramStatus').className='mt-3 text-xs font-semibold text-red-600';notice(e.message,false)}}
+async function v22TestTelegram(){try{auth();const j=await callOrderApi('testTelegram');if(j.success!==true && j.ok!==true)throw Error(j.message||j.error||'Telegram test failed');$('telegramStatus').textContent='Telegram notification sent successfully ✓';$('telegramStatus').className='mt-3 text-xs font-semibold text-emerald-600';notice('Telegram test notification sent ✓')}catch(e){$('telegramStatus').textContent='Telegram test failed: '+e.message;$('telegramStatus').className='mt-3 text-xs font-semibold text-red-600';notice(e.message,false)}}
 async function v22SaveSettingsGroup(group){try{auth();if(!window.__settings)await loadSettings();let x={...(window.__settings||{})};const apiUrl=(($('setOrderApiUrl')?.value||DEFAULT_ORDER_API_URL).trim()||DEFAULT_ORDER_API_URL);x.orderApiUrl=apiUrl;localStorage.setItem('aqOrderApiUrl',apiUrl);sessionStorage.setItem('aqOrderApiUrl',apiUrl);
 if(group==='delivery'){x.insideDelivery=Number($('setInside').value||0);x.outsideDelivery=Number($('setOutside').value||0);x.freeDeliveryMin=Number($('setFree').value||0);x.deliveryModes={weight:{active:$('setWeightActive').checked,label:'পণ্যের ওজনের উপর',ratePerKg:Number($('setWeightRate').value||0),rounding:'ceil'},inside:{active:$('setInsideActive').checked,label:"Inside Cox's Bazar",charge:Number($('setInside').value||0)},outside:{active:$('setOutsideActive').checked,label:"Outside Cox's Bazar",charge:Number($('setOutside').value||0)}}}
 if(group==='contact'){x.phone=$('setPhone').value.trim();x.address=$('setAddress').value.trim();x.mapLink=$('setMap').value.trim();x.whatsapp=$('setWhatsApp').value.trim();x.messenger=$('setMessenger').value.trim();x.facebook=$('setFacebook').value.trim();x.instagram=$('setInstagram').value.trim();x.tiktok=$('setTikTok').value.trim()}
